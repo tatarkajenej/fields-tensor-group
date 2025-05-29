@@ -4,7 +4,7 @@ FIELD_RANDOM_PARAMS = (20, 10) # num_bound, den_bound
 
 def RND(r, E, random_point_factory=None, points_used=SAMPLE):
     """
-        ComputeRND_r(E), where r is an integer and E is given as a matrix of linear forms.
+        Compute RND_r(E), where r is an integer and E is given as a matrix of linear forms.
 
         Return it as an abstract submodule object, its elements can be read of as matrices by using .lift() on them.
 
@@ -108,7 +108,7 @@ def rnd_lift_attempt(rnd):
 ATTEMPTS = 5
 def hypersurface_linear_variable_factory(f, E):
     """
-        Create a random_point factory for a hypersurface cutting the space of matrices E.
+        Create a random_point_factory for a hypersurface cutting the space of matrices E.
 
         f needs to be from the polynomial ring that entries of E are in. It also needs to be linear with respect to at least one of its variables.
     """
