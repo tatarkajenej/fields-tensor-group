@@ -1,0 +1,202 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[english]{babel}
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{enumitem}
+\setlist[1,enumerate]{label={(\roman*)}}
+\setlist[1]{leftmargin=1.5em}
+\setlist[2,enumerate]{label={(\alph*)}}
+\setlist{itemsep=0pt, topsep=\smallskipamount, listparindent=1em}
+\usepackage{tikz-cd}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+
+\def\floor#1{\left\lfloor#1\right\rfloor}
+\def\ceil#1{\left\lceil#1\right\rceil}
+\def\N{\mathbb N}\let\en\N
+\def\Z{\mathbb Z}\let\zet\Z
+\def\Q{\mathbb Q}\let\kve\Q
+\def\R{\mathbb R}\let\er\R
+\def\C{\mathbb C}\let\ce\C
+\def\P{\mathbb P}\let\pe\P
+\def\O{\mathcal O}
+
+\def\reg{\text{reg}}
+
+\def\zav#1{\left(#1\right)}
+\def\set#1{\left\{#1\right\}}
+\def\gener#1{\left\langle#1\right\rangle}
+\def\mtrx#1{\begin{pmatrix}#1\end{pmatrix}}
+
+\DeclareMathOperator{\Sym}{Sym}\let\sym\Sym
+\DeclareMathOperator{\Hom}{Hom}\let\hom\Hom
+\DeclareMathOperator{\rank}{rank}\let\rk\rank
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\RND}{RND}
+\DeclareMathOperator{\ND}{ND}
+\DeclareMathOperator{\Seg}{Seg}
+
+\def\uv#1{``#1''}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Generalizing the RND unliftability criterion}
+\author{Matěj Doležálek}
+\date{}
+
+\begin{document}
+
+
+\maketitle
+
+\section{Main statement}
+
+Whenever $X\subseteq\pe^n$ is a projective variety, let $\hat X$ denote its affine cone.
+\begin{definition}
+    Let us say a space of matrices $E\subseteq \Hom(B^*,C)$ is \emph{$r$-liftable}, if it is contained within a larger space $E'\supsetneq E$ such that
+    \[
+        \codim_E(E\cap \hat\sigma_r\Seg(\pe B\times\pe C)) = \codim_{E'}({E'}\cap \hat\sigma_r\Seg(\pe B\times\pe C)).
+    \]
+    Otherwise, let us say $E$ is \emph{$r$-unliftable}.
+\end{definition}
+
+\begin{definition}
+    For a space of matrices $E\subseteq \Hom(B^*,C)$ that contains at least one matrix of rank $r$, we define its space of \emph{rank $r$ neutral directions} as
+    \[
+        \RND_r(E) := \bigcap_{e\in E, \rank(e)=r} \zav{E + \set{M\in \Hom(B^*,C)\mid M(\ker e)\subseteq \im e}}
+    \]
+\end{definition}
+
+\begin{prop}
+    \label{prp:main}
+    $E\subseteq\RND_r(E)$. If equality holds and $\pe E\cap \sigma_r(\pe B\times\pe C)$ is irreducible, then $E$ is $r$-unliftable.
+\end{prop}
+Note: I hope the irreducibility condition could be replaced by something less demanding, but I have not figured out a good way to do it yet, so I leave it for now.
+
+
+\section{Proof}
+
+Let us generalize the approach and proof of \cite[Section 3]{draisma}. As in there we generalize by replacing $\sigma_r \Seg(\pe B\times\pe C)$ with an (almost) arbitrary projective variety. Consider a projective variety $X\subseteq \pe V$. Consider further a linear subspace $E\subseteq V$ with the property that $\codim_E(\hat X \cap E) = k$. We wish to provide a criterion for when $E$ is inclusion-maximal among spaces with this property.
+
+As a technical condition, let us assume that $X_E := X\cap \pe E$ is irreducible and that $X_{E,\reg} := X_\reg\cap \pe E$ is non-empty.
+
+\begin{definition}
+    Let us say $E$ is \emph{$X$-liftable} (resp. \emph{$X$-unliftable}) if it is contained in some (resp. is not contained in any) $E'\supsetneq E$ such that
+    \[
+        \codim_{E'} (E'\cap \hat X) = k.
+    \]
+\end{definition}
+
+\begin{definition}
+    Let us define the space of \emph{$X$-neutral direction of $E$} as
+    \[
+        \ND_X(E) := \bigcap_{[e]\in X_{E,\reg}}(E+\hat T_{[e]}X).
+    \]
+\end{definition}
+
+Let us now fix $E$ and define
+\[
+    U := \set{v\in V\mid \text{$\codim_{E'}(\hat X\cap E')=k$ for $E':= E+v\ce$}},
+\]
+this is an affine variety in $V$. Note that trivially $E\subseteq U$. On the other hand, we will bound $U$ by $\ND_X(E)$:
+
+\begin{lemma}
+    \label{lem:general}
+    $U\subseteq \ND_X(E)$.
+\end{lemma}
+\begin{proof}
+    Let us prove that any $v\in V$ lies in $\ND_X(E)$. For $v\in E$ this is trivial, so let us presume $v\notin E$. Denote then $E':= E+v\ce$. This has dimension one larger than $E$, so by definition of $U$,  the dimension of $E'\cap \hat X$ must be one dimension larger than that of $E\cap \hat X$.
+
+    Since $X\cap \pe E$ was irreducible, all of $X\cap \pe E$ must be contained within a maximum-dimensional component of $X\cap \pe E'$.
+    Thus for every $[e]\in X_{E,\reg}$, there is a tangent direction $w\in\hat T_{[e]} X$ contained in $E'$ but not in $E$. This forces $E+w\ce = E'$ for dimension reasons and then
+    \[
+        v \in E' = E+w\ce \subseteq E+\hat T_{[e]} X,
+    \]
+    which proves the desired inclusion.
+\end{proof}
+
+\begin{corollary}
+    \label{cor:criterion}
+    $E\subseteq \ND_X(E)$, and if equality occurs, then $E$ is $X$-unliftable.
+\end{corollary}
+
+
+
+\begin{lemma}[{\cite[Lemma 9.]{draisma}}]
+    \label{lem:secant-segre-tangent}
+    For a matrix $e$ of rank $r$, we have \[\hat T_{[e]}\sigma_r\Seg(\pe B\times\pe C) = \set{M\in \Hom(B^*, C)\mid M(\ker e)\subseteq \im e}.\]
+\end{lemma}
+
+\begin{proof}[Proof of Proposition~\ref{prp:main}]
+    Follows by combining Corollary~\ref{cor:criterion} and Lemma~\ref{lem:secant-segre-tangent}. Note that $\sigma_r\Seg(\pe B\times\pe C)$
+    %indeed is not contained in any hyperplane and it
+    is regular in all rank $r$ matrices, hence the technical condition $X_{E,\reg}\neq\emptyset$ is met.
+\end{proof}
+
+
+\section{Example}
+
+\begin{example}[$M_{\gener2}$ is $2$-unliftable]
+    Let us consider the space of matrices considering to the $2\times2$ matrix multiplication tensor, i.e.
+    \[
+        E := \set{\mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w},\quad x,y,z,w\in\ce}.
+    \]
+    This intersects $\hat\sigma_2\Seg$ in the hypersurface $xw-yz=0$. This irreducible, so we may use Proposition~\ref{prp:main}. Let us show that $E=\RND_2(E)$ and therefore that $E$ is $2$-unliftable. For this, let us choose in the intersection defining $\RND_2(E)$ the matrices
+    \begin{align*}
+        e_1 &= \mtrx{1&0&&\\0&0&&\\&&1&0\\&&0&0}, &
+        e_2 &= \mtrx{0&1&&\\0&0&&\\&&0&1\\&&0&0}, \\
+        e_3 &= \mtrx{0&0&&\\1&0&&\\&&0&0\\&&1&0}, &
+        e_4 &= \mtrx{0&0&&\\0&1&&\\&&0&0\\&&0&1}.
+    \end{align*}
+    We then compute
+    \begin{align*}
+        E+\hat T_{[e_1]}\sigma_r\Seg &= \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} + \mtrx{*&*&*&*\\ *&0&*&0\\ *&*&*&*\\ *&0&*&0} = \mtrx{*&*&*&*\\ *&w&*&0\\ *&*&*&*\\ *&0&*&w}
+    \end{align*}
+    and analogously
+    \begin{align*}
+        E+\hat T_{[e_2]}\sigma_r\Seg &= \mtrx{
+            *&*&*&*\\
+            z&*&0&*\\
+            *&*&*&*\\
+            0&*&z&*
+        },&
+        E+\hat T_{[e_3]}\sigma_r\Seg &= \mtrx{
+            *&y&*&0\\
+            *&*&*&*\\
+            *&0&*&y\\
+            *&*&*&*
+        },&
+        E+\hat T_{[e_4]}\sigma_r\Seg &= \mtrx{
+            x&*&0&*\\
+            *&*&*&*\\
+            0&*&x&*\\
+            *&*&*&*
+        },
+    \end{align*}
+    whence intersecting gives $\RND_2(E)\subseteq \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} = E$ as wanted.
+\end{example}
+
+\begin{thebibliography}{99}
+\bibitem[Dr]{draisma}
+    Jan Draisma,
+    \textit{Small maximal spaces of non-invertible matrices},
+    Bull. London Math. Soc. 38 (2006), no. 5,
+    764--776.
+
+\bibitem[HL]{huang-landsberg}
+    Hang Huang and J. M. Landsberg,
+    \textit{On linear spaces of matrices of bounded rank}.
+
+\end{thebibliography}
+
+\end{document}
