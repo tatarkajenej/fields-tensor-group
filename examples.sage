@@ -39,14 +39,14 @@ Derek7 = Tensor(EDerek7)
 # This is liftable in all three flattenings. It can eventually be lifted to the following:
 R = PolynomialRing(FIELD, 8, "x")
 x0, x1, x2, x3, x4, x5, x6, x7 = R.gens()
-E888 = Matrix([
-    [ 20*x0,  15*x1,   6*x2,     x3,      0,      0,      0,      0],
-    [ 10*x4,  15*x5,      0,      0,   6*x2,     x3,      0,      0],
-    [  4*x6,      0,   6*x5,      0,  -6*x1,      0,     x3,      0],
-    [  2*x7,      0,      0,    -x5,      0,     x1,     x2,      0],
-    [     0,  -3*x7,      0,    -x4,      0,   2*x0,      0,   6*x2],
-    [     0,      0,  -3*x7,    -x6,      0,      0,   5*x0, -15*x1],
-    [     0,      0,      0,      0, -18*x7,  -6*x6,  15*x4, -90*x5],
-    [     0,     x6,    -x4,      0,   2*x0,      0,      0,    -x3]
+E8 = Matrix([
+    [ x4,   0,   0,   0,   0,  x2,  x1,  x7],
+    [  0,  x4,   0,   0,  x2,   0, -x0, -x6],
+    [  0,   0,  x4,   0, -x1, -x0,   0,  x5],
+    [  0,   0,   0,  x4,  x7,  x6,  x5,   0],
+    [  0,  x5,  x6,  x0,  x3,   0,   0,   0],
+    [ x5,   0, -x7, -x1,   0,  x3,   0,   0],
+    [-x6, -x7,   0,  x2,   0,   0,  x3,   0],
+    [ x0,  x1,  x2,   0,   0,   0,   0,  x3]
 ])
-T888 = Tensor(E888)
+T8 = Tensor(E8)
