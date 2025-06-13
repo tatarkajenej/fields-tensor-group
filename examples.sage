@@ -23,6 +23,16 @@ EDerek6 = Matrix([
 Derek6 = Tensor(EDerek6)
 # There is a rank 4 cubic hypersurface in all three flattenings, and this rank 4 locus is unliftable in all three.
 
+sextE = Matrix([
+    [x0,  0,  0,  0, -x2, -x4],
+    [ 0, x0,  0,  0, -x3, -x5],
+    [ 0,  0, x0,  0,  x1,   0],
+    [ 0,  0,  0, x0,   0,  x1],
+    [x1,  0, x2, x4,   0,   0],
+    [ 0, x1, x3, x5,   0,   0]
+])
+sextT = Tensor(sextE)
+
 
 R = PolynomialRing(FIELD, 7, "x")
 x0, x1, x2, x3, x4, x5, x6 = R.gens()
@@ -50,3 +60,16 @@ E8 = Matrix([
     [ x0,  x1,  x2,   0,   0,   0,   0,  x3]
 ])
 T8 = Tensor(E8)
+
+# ... which can actually be turned into the structure tensor of octonions, presented e.g. as:
+octE = Matrix([
+    [x0,  x1,   0,  0,  x4,  0, x6,   0],
+    [ 0,   0,  x0, x1,  x5,  0, x7,   0],
+    [x2,  x3,   0,  0,   0, x4,  0,  x6],
+    [ 0,   0,  x2, x3,   0, x5,  0,  x7],
+    [ 0, -x5,   0, x4,   0,  0, x2, -x0],
+    [x5,   0, -x4,  0,   0,  0, x3, -x1],
+    [ 0, -x7,   0, x6, -x2, x0,  0,   0],
+    [x7,   0, -x6,  0, -x3, x1,  0,   0]
+])
+octT = Tensor(octE)
