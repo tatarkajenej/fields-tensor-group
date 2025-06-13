@@ -1,6 +1,5 @@
 SAMPLE = 50
 FIELD = QQ
-FIELD_RANDOM_PARAMS = (20, 10) # num_bound, den_bound
 ATTEMPTS = 5
 
 load("factories.sage")

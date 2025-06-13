@@ -4,6 +4,8 @@ Auxiliary file to handle "random point factories" -- functions that randomly gen
 This is of course hard to handle generally (the variety might not even have rational points), so I just construct some hacked-together solutions for the types of varieties that come up in examples.
 """
 
+FIELD = QQ
+FIELD_RANDOM_PARAMS = (20, 10) # num_bound, den_bound
 FACTORY_ATTEMPTS = 5
 
 def solve_linear_equation(f, var):
