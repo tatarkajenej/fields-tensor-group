@@ -1,6 +1,6 @@
 class RankProfile(object):
     """
-        Object to hold information about various rank <= r loci of a space of matrices
+        Object to hold information about various (rank <= r) loci of a space of matrices
     """
 
     def __init__(self, E, take_radicals=True):
@@ -35,7 +35,9 @@ class RankProfile(object):
 
     def get_next(self, r):
         """
-            Return the rank r' in self.ranks such that the (rank <= r) locus actually coincides with (rank <= r')
+            Return the rank r' in self.ranks such that the (rank <= r) locus actually coincides with (rank <= r').
+
+            This is just the largest r' <= r such that r' actually appears as a rank of some matrix in the space.
         """
 
         if r < 0:

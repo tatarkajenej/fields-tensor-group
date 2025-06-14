@@ -2,6 +2,7 @@ load("profile.sage")
 
 # Indexing follows Jagiełła-Jelisiejew, section 4.1
 
+FIELD = QQ
 R = PolynomialRing(FIELD, 5, "x")
 x0, x1, x2, x3, x4 = R.gens()
 all_tensors = []
@@ -9,7 +10,7 @@ all_tensors = []
 
 ## subsection 4.1.1
 
-E1_1 = Matrix([
+T1_1 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2, x1, x0,  0,  0],
@@ -17,7 +18,7 @@ E1_1 = Matrix([
     [x4, x3, x2, x1, x0]
 ])
 
-E1_2 = Matrix([
+T1_2 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -25,7 +26,7 @@ E1_2 = Matrix([
     [x4,  0, x3, x2, x0]
 ])
 
-E1_3 = Matrix([
+T1_3 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -33,7 +34,7 @@ E1_3 = Matrix([
     [x4, x1, x3, x2, x0]
 ])
 
-E1_4 = Matrix([
+T1_4 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2, x1, x0,  0,  0],
@@ -41,7 +42,7 @@ E1_4 = Matrix([
     [x4,  0,  0, x3, x0]
 ])
 
-E1_5 = Matrix([
+T1_5 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -49,7 +50,7 @@ E1_5 = Matrix([
     [x4, x2, x1, 0, x0]
 ])
 
-E1_6 = Matrix([
+T1_6 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -57,7 +58,7 @@ E1_6 = Matrix([
     [x4,  0,  0, x3, x0]
 ])
 
-E1_7 = Matrix([
+T1_7 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -65,7 +66,7 @@ E1_7 = Matrix([
     [x4,  0, x3, x2, x0]
 ])
 
-E1_8 = Matrix([
+T1_8 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -73,7 +74,7 @@ E1_8 = Matrix([
     [x4, x2, x1, x3, x0]
 ])
 
-E1_9 = Matrix([
+T1_9 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -81,7 +82,7 @@ E1_9 = Matrix([
     [x4,  0,  0,  0, x0]
 ])
 
-E1_10 = Matrix([
+T1_10 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [ 0,  0, x0,  0,  0],
@@ -89,7 +90,7 @@ E1_10 = Matrix([
     [ 0, x2, x4,  0, x0]
 ])
 
-E1_11 = Matrix([
+T1_11 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [ 0,  0, x0,  0,  0],
@@ -97,7 +98,7 @@ E1_11 = Matrix([
     [x1, x2, x3,  0, x0]
 ])
 
-E1_12 = Matrix([
+T1_12 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [ 0,  0, x0,  0,  0],
@@ -105,7 +106,7 @@ E1_12 = Matrix([
     [x2, x3, x1,  0, x0]
 ])
 
-E1_13 = Matrix([
+T1_13 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [ 0,  0, x0,  0,  0],
@@ -113,7 +114,7 @@ E1_13 = Matrix([
     [x2, x3,  0,  0, x0]
 ])
 
-E1_14 = Matrix([
+T1_14 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [ 0,  0, x0,  0,  0],
@@ -121,7 +122,7 @@ E1_14 = Matrix([
     [x2, x3, x4,  0, x0]
 ])
 
-E1_15 = Matrix([
+T1_15 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [ 0,  0, x0,  0,  0],
@@ -129,7 +130,7 @@ E1_15 = Matrix([
     [x2,  0,  0,  0, x0]
 ])
 
-E1_16 = Matrix([
+T1_16 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [x1,  0, x0,  0,  0],
@@ -137,7 +138,7 @@ E1_16 = Matrix([
     [x2, x4, x1,  0, x0]
 ])
 
-E1_17 = Matrix([
+T1_17 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [x1,  0, x0,  0,  0],
@@ -145,7 +146,7 @@ E1_17 = Matrix([
     [x2, x4, x1,  0, x0]
 ])
 
-E1_18 = Matrix([
+T1_18 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [x1,  0, x0,  0,  0],
@@ -153,7 +154,7 @@ E1_18 = Matrix([
     [x2,  0, x1,  0, x0]
 ])
 
-E1_19 = Matrix([
+T1_19 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [x1,  0, x0,  0,  0],
@@ -161,12 +162,12 @@ E1_19 = Matrix([
     [x2, x3, x1,  0, x0]
 ])
 
-for i in range(1,20): exec("all_tensors.append(E1_%i)" % i)
+for i in range(1,20): exec("all_tensors.append(T1_%i)" % i)
 
 
 ## subsection 4.1.2
 
-E2_1 = Matrix([
+T2_1 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2, x1, x0,  0,  0],
@@ -174,7 +175,7 @@ E2_1 = Matrix([
     [ 0,  0,  0, x3, x0+x4]
 ])
 
-E2_2 = Matrix([
+T2_2 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -182,7 +183,7 @@ E2_2 = Matrix([
     [ 0,  0,  0, x3, x0+x4]
 ])
 
-E2_3 = Matrix([
+T2_3 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2, x1, x0,  0,  0],
@@ -190,7 +191,7 @@ E2_3 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-E2_4 = Matrix([
+T2_4 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -198,7 +199,7 @@ E2_4 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-E2_5 = Matrix([
+T2_5 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -206,7 +207,7 @@ E2_5 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-E2_6 = Matrix([
+T2_6 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -214,7 +215,7 @@ E2_6 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-E2_7 = Matrix([
+T2_7 = Matrix([
     [x0,   0,  0,  0,  0],
     [ 0,  x0,  0,  0,  0],
     [x1,  x2, x0,  0,  0],
@@ -222,7 +223,7 @@ E2_7 = Matrix([
     [ 0,   0,  0,  0, x0+x4]
 ])
 
-E2_8 = Matrix([
+T2_8 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0,  0,  0,  0],
     [x1, x2, x0,  0,  0],
@@ -230,9 +231,9 @@ E2_8 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-for i in range(1,9): exec("all_tensors.append(E2_%i)" % i)
+for i in range(1,9): exec("all_tensors.append(T2_%i)" % i)
 
-E3_1 = Matrix([
+T3_1 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2, x1, x0,  0,  0],
@@ -240,7 +241,7 @@ E3_1 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-E3_2 = Matrix([
+T3_2 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [x2,  0, x0,  0,  0],
@@ -248,7 +249,7 @@ E3_2 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-E3_3 = Matrix([
+T3_3 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [ 0,  0, x0+x3,  0,  0],
@@ -256,18 +257,18 @@ E3_3 = Matrix([
     [ 0,  0,  0,  0, x0+x4]
 ])
 
-for i in range(1,4): exec("all_tensors.append(E3_%i)" % i)
+for i in range(1,4): exec("all_tensors.append(T3_%i)" % i)
 
-E4_1 = Matrix([
+T4_1 = Matrix([
     [x0,  0,  0,  0,  0],
     [x1, x0,  0,  0,  0],
     [ 0,  0, x0+x2,  0,  0],
     [ 0,  0,  0, x0+x3,  0],
     [ 0,  0,  0,  0, x0+x4]
 ])
-all_tensors.append(E4_1)
+all_tensors.append(T4_1)
 
-E5_1 = Matrix([
+T5_1 = Matrix([
     [x0,  0,  0,  0,  0],
     [ 0, x0+x1,  0,  0,  0],
     [ 0,  0, x0+x2,  0,  0],
@@ -276,7 +277,7 @@ E5_1 = Matrix([
 ])
 all_tensors.append(E5_1)
 
-EO58 = Matrix([
+TO58 = Matrix([
     [x0,  0,  x1,  x2, x4],
     [x4, x0,  x3, -x1,  0],
     [ 0,  0,  x0,   0,  0],
@@ -284,7 +285,7 @@ EO58 = Matrix([
     [ 0,  0,   0,  x4,  0]
 ])
 
-EO57 = Matrix([
+TO57 = Matrix([
     [x0,  0, x1,  x2, x4],
     [ 0, x0, x3, -x1,  0],
     [ 0,  0, x0,   0,  0],
@@ -292,7 +293,7 @@ EO57 = Matrix([
     [ 0,  0,  0,  x4,  0]
 ])
 
-EO56 = Matrix([
+TO56 = Matrix([
     [x0,  0, x1, x2, x4],
     [ 0, x0,  0, x3, x4],
     [ 0,  0, x0,  0,  0],
@@ -300,7 +301,7 @@ EO56 = Matrix([
     [ 0,  0,  0, x4,  0]
 ])
 
-EO55 = Matrix([
+TO55 = Matrix([
     [x0,  0, x1, x2, x4],
     [ 0, x0, x4, x3,  0],
     [ 0,  0, x0,  0,  0],
@@ -308,7 +309,7 @@ EO55 = Matrix([
     [ 0,  0,  0, x4,  0]
 ])
 
-EO54 = Matrix([
+TO54 = Matrix([
     [x0,  0, x1, x2, x4],
     [ 0, x0,  0, x3,  0],
     [ 0,  0, x0,  0,  0],
@@ -316,7 +317,7 @@ EO54 = Matrix([
     [ 0,  0,  0, x4,  0]
 ])
 
-for i in range(8,3,-1): exec("all_tensors.append(EO5%i)" % i)
+for i in range(8,3,-1): exec("all_tensors.append(TO5%i)" % i)
 
 
 ## appendix B
