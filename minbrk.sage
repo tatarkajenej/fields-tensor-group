@@ -275,7 +275,7 @@ T5_1 = Matrix([
     [ 0,  0,  0, x0+x3,  0],
     [ 0,  0,  0,  0, x0+x4]
 ])
-all_tensors.append(E5_1)
+all_tensors.append(T5_1)
 
 TO58 = Matrix([
     [x0,  0,  x1,  x2, x4],
