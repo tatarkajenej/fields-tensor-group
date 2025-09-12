@@ -1,0 +1,275 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[english]{babel}
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{enumitem}
+\setlist[1,enumerate]{label={(\roman*)}}
+\setlist[1]{leftmargin=1.5em}
+\setlist[2,enumerate]{label={(\alph*)}}
+\setlist{itemsep=0pt, topsep=\smallskipamount, listparindent=1em}
+\usepackage{tikz-cd}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+
+\def\floor#1{\left\lfloor#1\right\rfloor}
+\def\ceil#1{\left\lceil#1\right\rceil}
+\def\N{\mathbb N}\let\en\N
+\def\Z{\mathbb Z}\let\zet\Z
+\def\Q{\mathbb Q}\let\kve\Q
+\def\R{\mathbb R}\let\er\R
+\def\C{\mathbb C}\let\ce\C
+\def\P{\mathbb P}\let\pe\P
+\def\O{\mathcal O}
+
+\def\reg{\text{reg}}
+
+\def\zav#1{\left(#1\right)}
+\def\set#1{\left\{#1\right\}}
+\def\gener#1{\left\langle#1\right\rangle}
+\def\mtrx#1{\begin{pmatrix}#1\end{pmatrix}}
+
+\DeclareMathOperator{\Sym}{Sym}\let\sym\Sym
+\DeclareMathOperator{\Hom}{Hom}\let\hom\Hom
+\DeclareMathOperator{\rank}{rank}\let\rk\rank
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\RND}{RND}
+\DeclareMathOperator{\ND}{ND}
+\DeclareMathOperator{\Seg}{Seg}
+\DeclareMathOperator{\GR}{GR}
+
+\def\uv#1{``#1''}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Degenerate geometric rank project}
+\author{Applications of Commutative Algebra workshop, Fields Institute 2025}
+\date{}
+
+\begin{document}
+
+
+\maketitle
+
+\setcounter{section}{-1}
+\section{Conventions and notation}
+For the sake of simplicity, let us work solely over $\ce$.
+We will use both projective and affine spaces, to this end, we will consider $\pe^N$ as some $\pe V$ for a vector space $V$. For any $0\neq v\in V$, we will use $[v]$ to denote the point in $\pe V$ corresponding to the line $\ce v$.
+
+Suppose $X\subseteq\pe V$ is a projective variety. We denote by $\hat X\subseteq V$ its affine cone, by $X_\reg$ its regular locus and by $T_xX$ its tangent space at $x\in X$; consequently, the affine tangent cone is $\hat T_x X$. We will use $\Seg$ to denote the (projective) Segre variety, considering it as $\Seg(\pe B\times\pe C)\subseteq  \pe(B\otimes C)= \pe(\Hom(B^*, C))$. The $r$-th secant variety of an $X\subseteq\pe^N$ (again as a projective variety) will be denoted $\sigma_r X$.
+
+\section{Liftability}
+
+\subsection{Statement}
+
+\begin{definition}
+    Let us say a space of matrices $E\subseteq \Hom(B^*,C)$ is \emph{$r$-liftable}, if it is contained within a larger space $E'\supsetneq E$ such that
+    \[
+        \codim_{\pe E}(\pe E\cap \sigma_r\Seg(\pe B\times\pe C)) = \codim_{\pe E'}({\pe E'}\cap \sigma_r\Seg(\pe B\times\pe C));
+    \]
+    let us then say that \emph{$E$ $r$-lifts to $E'$}.
+    Otherwise, let us say $E$ is \emph{$r$-unliftable}.
+\end{definition}
+
+\begin{definition}
+    Consider a space of matrices $E\subseteq \Hom(B^*,C)$ that contains at least one matrix of rank $r$ and denote by $Y\subseteq \pe E$ the locus of matrices of rank at most $r$. Let $Y_1,\dots, Y_k$ be the irreducible components of $Y$ and let $\tilde Y_i$ be the locus of points $[e]\in Y_i$ which are regular points of $Y$ and have $\rank(e) = r$.  Then we define the \emph{set of rank-$r$ neutral directions} of $E$ as
+    \[
+        \RND_r(E) := \bigcup_{1\leq i\leq r} \bigcap_{[e]\in \tilde Y_i} \zav{E + \set{M\in \Hom(B^*,C)\mid M(\ker e)\subseteq \im e}}.
+%         \RND_r(E) := \bigcap_{e\in E, \rank(e)=r} \zav{E + \set{M\in \Hom(B^*,C)\mid M(\ker e)\subseteq \im e}}
+    \]
+    (If $\tilde Y_i=\emptyset$, we interpret the corresponding intersection as the entire space $V$.)
+\end{definition}
+%
+\begin{prop}
+    \label{prp:main-liftability}
+    If $E$ $r$-lifts to an $E'=E+\ce v$, then $v\in \RND_r(E)$. In particular, if equality occurs in  $E\subseteq \RND_r(E)$, then $E$ is $r$-unliftable.
+\end{prop}
+\begin{remark}
+    \begin{enumerate}
+        \item The Proposition may be useful either as a criterion of non-liftability, or as a tool which \uv{hints} at a possible lift. This latter option is most plausible if $Y$ happens to be irreducible and $\RND_r(E)$ is a linear space of dimension $\dim E+1$, since then the only possible lift is $E':=\RND_r(E)$ itself.
+        \item In practice, one will wish to only use some choice of finitely many $[e]\in\tilde Y_i$ in each of the intersections in the definition $\RND_r(E)$, any such choice will give a superset of $\RND_r(E)$, i.e. a valid albeit potentially weaker \uv{hint}. See Section~\ref{sec:examples} for examples of this.
+
+        An algorithmic implementation might choose a reasonable number of points $[e]$ randomly from $Y_i$, since a generic point of $Y_i$ ought to lie in $\tilde Y_i$ unless $\tilde Y_i$ is empty.
+    \end{enumerate}
+\end{remark}
+% Note: I hope the irreducibility condition could be replaced by something less demanding, but I have not figured out a good way to do it yet, so I leave it for now.
+
+
+\subsection{Proof}
+
+Let us generalize the approach and proof of \cite[Section 3]{draisma}. As in there, we generalize by replacing $\sigma_r \Seg(\pe B\times\pe C)$ with an arbitrary projective variety. Consider a projective variety $X\subseteq \pe V$ and a linear subspace $E\subseteq V$ with the property that $\codim_{\pe E}(X \cap \pe E) = m$. Whenever $E'\supseteq E$ is a larger space, $\codim_{\pe E'}(X\cap \pe E')$ will be at least $m$. We wish to provide a criterion for when $E$ is inclusion-maximal among spaces with $\codim_{\pe E}(X\cap \pe E)=m$.
+
+\begin{definition}
+    Let us say $E$ is \emph{$X$-liftable} (resp. \emph{$X$-unliftable}) if it is contained in some (resp. is not contained in any) $E'\supsetneq E$ such that
+    \[
+        \codim_{\pe E'} (X\cap \pe E') = m.
+    \]
+\end{definition}
+
+\begin{definition}
+    \label{def:NDX}
+    Let $Y:=X\cap\pe E$ considered as a scheme-theoretic intersection, let $Y_1,\dots,Y_k$ be the maximum-dimensional irreducible components of $Y$ and denote $\tilde Y_i := Y_i\cap Y_\reg\cap X_\reg$.
+    Then we define the set of \emph{$X$-neutral directions of $E$} as
+    \[
+        \ND_X(E) := \bigcup_{1\leq i\leq k}\ \bigcap_{e\in \tilde Y_i}(E+\hat T_{e}X).
+    \]
+\end{definition}
+\begin{remark}
+    \begin{enumerate}
+    \item Note that in the simplest case when $Y=X\cap \pe E'$ is irreducible, the set of $X$-neutral directions simplifies to
+    $\ND_X(E) = \bigcap_{e\in Y_\reg\cap X_\reg} (E+\hat T_e X)$ and is a linear subspace of $V$.
+    \item If a $\tilde Y_i$ is empty, we interpret the intersection indexed by it as the whole space $V$.
+    \end{enumerate}
+\end{remark}
+
+
+Let us now fix $E$ and define
+\[
+    U := \set{v\in V\mid \text{$\codim_{\pe E'}(X\cap \pe E')=m$ for $E':= E+\ce v$}},
+\]
+this is an affine variety in $V$. Note that trivially $E\subseteq U$. On the other hand, we will bound $U$ by $\ND_X(E)$:
+
+\begin{lemma}
+    \label{lem:general}
+    $U\subseteq \ND_X(E)$.
+\end{lemma}
+\begin{proof}
+    Let us consider an arbitrary $v\in U$ and prove it lies in $\ND_X(E)$. For $v\in E$ this is trivial, so let us presume $v\notin E$ and denote $E':= E+v\ce$. This has $\dim E' = \dim E+1$, and so by the definition of $U$, denoting $d:=\dim(X\cap \pe E)$ we must have $\dim(X\cap \pe E') = d+1$. Therefore, $X\cap \pe E'$ has some irreducible component $Z$ of dimension $d+1$. Further, it must be the case that $\dim(Z\cap \pe E) = d$, so $Z\cap \pe E$ has an irreducible component of dimension $d$. Each irreducible component of $Z\cap \pe E$ must also be among the irreducible components of $X\cap \pe E$, so without loss of generality, assume $Y_1$ (in the notation of Definition~\ref{def:NDX}, so it has dimension $d$) is an irreducible component of $Z\cap\pe E$.
+
+    Consider any $e\in \tilde Y_1 = Y_1\cap Y_\reg\cap X_\reg$. Points in the intersection of two or more components of $Y$ are singular points of $Y$, hence no point of $\tilde Y_1$ lies on any other $Y_i$. Thereafter, a $y\in Y_1\setminus (Y_2\cup\cdots\cup Y_k)$ is a regular point of $Y_1$ if and only if it is a regular point of $Y$. Hence, $e$ is a regular point of $Y_1$.
+
+    Let us consider $\hat T_e Z$ (note that $e$ need not be a regular point of $Z$). We claim that $\hat T_eZ\nsubseteq E$. If the opposite is the case, then $\pe E$ is a hyperplane in $\pe E'$ tangent to $Z$ at $e$. This would make $e$ a singular point of $Z\cap \pe E$ (scheme-theoretically). Since $e$ must lie only on $Y_1$ and on no other $Y_i$, it also only lies on $Y_1$ from among the irreducible components of $Z\cap \pe E$. So $e$ being a singular point of $Z\cap \pe E$ would imply it is a singular point of $Y_1$, a contradiction.
+
+    Thus, we may choose a vector $w\in \hat T_e Z\setminus E$. Since $E$ is a hyperplane in $E'$, this forces $E' = E+\ce w$. Simultaneously $w\in\hat T_e Z \subseteq \hat T_e X$, so we conclude
+    %Then $w\in E'$ {\color{red}\texttt{<NOT TRUE>} but $w\notin E$ \texttt{</NOT TRUE>}}, so $E'=E+\ce w$ because $\dim E'=\dim E+1$. Note however that $w\in \hat T_e Z\subseteq\hat T_e X$, so we obtain
+    \[
+        v \in E' = E+\ce w \subseteq E+\hat T_e X.
+    \]
+    This holds for each $e\in \tilde Y_1$, so
+    \[
+        v \in \bigcap_{e\in \tilde Y_1}(E+\hat T_e X),
+    \]
+    which is one of the terms in the union defining $\ND_X(E)$, hence $v\in \ND_X(E)$.
+%     Let us prove that any $v\in U$ lies in $\ND_X(E)$. For $v\in E$ this is trivial, so let us presume $v\notin E$. Denote then $E':= E+v\ce$. This has dimension one larger than $E$, so by definition of $U$,  the dimension of $E'\cap \hat X$ must be one larger than that of $E\cap \hat X$.
+%
+%     Since $X\cap \pe E$ was irreducible, all of $X\cap \pe E$ must be contained within a maximum-dimensional component of $X\cap \pe E'$.
+%     Thus for every $[e]\in X_{E,\reg}$, there is a tangent direction $w\in\hat T_{[e]} X$ contained in $E'$ but not in $E$. This forces $E+w\ce = E'$ for dimension reasons and then
+%     \[
+%         v \in E' = E+w\ce \subseteq E+\hat T_{[e]} X,
+%     \]
+%     which proves the desired inclusion.
+\end{proof}
+
+
+\begin{corollary}
+    \label{cor:criterion}
+    $E\subseteq \ND_X(E)$, and if equality occurs, then $E$ is $X$-unliftable.
+\end{corollary}
+
+
+
+\begin{lemma}[{\cite[Lemma 9.]{draisma}}]
+    \label{lem:secant-segre-tangent}
+    The regular locus of $\sigma_r\Seg(\pe B\times\pe C)$ consists precisely of points $[e]$ corresponding to rank $r$ matrices $e$ and the tangent cone at $[e]$ is given by \[\hat T_{[e]}\sigma_r\Seg(\pe B\times\pe C) = \set{M\in \Hom(B^*, C)\mid M(\ker e)\subseteq \im e}.\]
+\end{lemma}
+
+\begin{proof}[Proof of Proposition~\ref{prp:main-liftability}]
+    Follows by taking $X:= \sigma_r \Seg(\pe B\times\pe C)$ in Corollary~\ref{cor:criterion} and applying Lemma~\ref{lem:secant-segre-tangent}.
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+\section{Examples}
+\label{sec:examples}
+
+\subsection{Matrix multiplication}
+
+\begin{example}[$M_{\gener2}$ is $2$-unliftable]
+    Let us consider the space of matrices considering to the $2\times2$ matrix multiplication tensor, i.e.
+    \[
+        E := \set{\mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w},\quad x,y,z,w\in\ce}.
+    \]
+    This intersects $\hat\sigma_2\Seg$ in the hypersurface $xw-yz=0$. This irreducible, so we may use Proposition~\ref{prp:main}. Let us show that $E=\RND_2(E)$ and therefore that $E$ is $2$-unliftable. For this, let us choose in the intersection defining $\RND_2(E)$ the matrices
+    \begin{align*}
+        e_1 &= \mtrx{1&0&&\\0&0&&\\&&1&0\\&&0&0}, &
+        e_2 &= \mtrx{0&1&&\\0&0&&\\&&0&1\\&&0&0}, \\
+        e_3 &= \mtrx{0&0&&\\1&0&&\\&&0&0\\&&1&0}, &
+        e_4 &= \mtrx{0&0&&\\0&1&&\\&&0&0\\&&0&1}.
+    \end{align*}
+    We then compute
+    \begin{align*}
+        E+\hat T_{[e_1]}\sigma_r\Seg &= \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} + \mtrx{*&*&*&*\\ *&0&*&0\\ *&*&*&*\\ *&0&*&0} = \mtrx{*&*&*&*\\ *&w&*&0\\ *&*&*&*\\ *&0&*&w}
+    \end{align*}
+    and analogously
+    \begin{align*}
+        E+\hat T_{[e_2]}\sigma_r\Seg &= \mtrx{
+            *&*&*&*\\
+            z&*&0&*\\
+            *&*&*&*\\
+            0&*&z&*
+        },&
+        E+\hat T_{[e_3]}\sigma_r\Seg &= \mtrx{
+            *&y&*&0\\
+            *&*&*&*\\
+            *&0&*&y\\
+            *&*&*&*
+        },&
+        E+\hat T_{[e_4]}\sigma_r\Seg &= \mtrx{
+            x&*&0&*\\
+            *&*&*&*\\
+            0&*&x&*\\
+            *&*&*&*
+        },
+    \end{align*}
+    whence intersecting gives $\RND_2(E)\subseteq \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} = E$ as wanted.
+\end{example}
+
+
+\subsection{Other structure tensors}
+
+\subsection{Minimal border rank}
+
+\subsection{Representation-theoretic constructions}
+
+
+
+
+
+\section{$\GR_{A,n-1}$}
+
+
+
+
+
+
+\begin{thebibliography}{99}
+\bibitem[Dr]{draisma}
+    Jan Draisma,
+    \textit{Small maximal spaces of non-invertible matrices},
+    Bull. London Math. Soc. 38 (2006), no. 5,
+    764--776.
+
+\bibitem[HL]{huang-landsberg}
+    Hang Huang and J. M. Landsberg,
+    \textit{On linear spaces of matrices of bounded rank}.
+
+\end{thebibliography}
+
+\end{document}
