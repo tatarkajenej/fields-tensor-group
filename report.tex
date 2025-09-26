@@ -7,10 +7,11 @@
 \setlist[1,enumerate]{label={(\roman*)}}
 \setlist[1]{leftmargin=1.5em}
 \setlist[2,enumerate]{label={(\alph*)}}
-\setlist{itemsep=0pt, topsep=\smallskipamount, listparindent=1em}
-\usepackage{tikz-cd}
+\setlist{noitemsep, topsep=\smallskipamount, listparindent=1em}
+\parindent1em\relax
 \usepackage{hyperref}
 \hypersetup{colorlinks=true}
+\usepackage{tikz-cd}
 
 \def\floor#1{\left\lfloor#1\right\rfloor}
 \def\ceil#1{\left\lceil#1\right\rceil}
@@ -21,13 +22,19 @@
 \def\C{\mathbb C}\let\ce\C
 \def\P{\mathbb P}\let\pe\P
 \def\O{\mathcal O}
+\def\oct{\mathbb O}
 
 \def\reg{\text{reg}}
+
+\let\oldphi\phi
+\let\phi\varphi
 
 \def\zav#1{\left(#1\right)}
 \def\set#1{\left\{#1\right\}}
 \def\gener#1{\left\langle#1\right\rangle}
 \def\mtrx#1{\begin{pmatrix}#1\end{pmatrix}}
+\let\surjto\twoheadrightarrow
+\let\injto\hookrightarrow
 
 \DeclareMathOperator{\Sym}{Sym}\let\sym\Sym
 \DeclareMathOperator{\Hom}{Hom}\let\hom\Hom
@@ -38,6 +45,9 @@
 \DeclareMathOperator{\ND}{ND}
 \DeclareMathOperator{\Seg}{Seg}
 \DeclareMathOperator{\GR}{GR}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\spn}{span}
 
 \def\uv#1{``#1''}
 
@@ -51,42 +61,80 @@
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
 
+
+
 \title{Degenerate geometric rank project}
 \author{Applications of Commutative Algebra workshop, Fields Institute 2025}
 \date{}
 
+\def\TODO#1{{\bfseries\color{red} TODO: #1}}
 \begin{document}
 
 
 \maketitle
 
 \setcounter{section}{-1}
-\section{Conventions and notation}
-For the sake of simplicity, let us work solely over $\ce$.
-We will use both projective and affine spaces, to this end, we will consider $\pe^N$ as some $\pe V$ for a vector space $V$. For any $0\neq v\in V$, we will use $[v]$ to denote the point in $\pe V$ corresponding to the line $\ce v$.
+\section{Preliminaries}
 
-Suppose $X\subseteq\pe V$ is a projective variety. We denote by $\hat X\subseteq V$ its affine cone, by $X_\reg$ its regular locus and by $T_xX$ its tangent space at $x\in X$; consequently, the affine tangent cone is $\hat T_x X$. We will use $\Seg$ to denote the (projective) Segre variety, considering it as $\Seg(\pe B\times\pe C)\subseteq  \pe(B\otimes C)= \pe(\Hom(B^*, C))$. The $r$-th secant variety of an $X\subseteq\pe^N$ (again as a projective variety) will be denoted $\sigma_r X$.
+\subsection{Conventions and notation}
+For the sake of simplicity, let us work solely over $\ce$.
+We will use both projective and affine spaces, to this end, we will consider $\pe^N$ as some $\pe V$ for an $N$-dimensional vector space $V$. For any $0\neq v\in V$, we will use $[v]$ to denote the point in $\pe V$ corresponding to the line $\ce v$.
+
+Suppose $X\subseteq\pe V$ is a projective variety. We denote by $\hat X\subseteq V$ its affine cone, by $X_\reg$ its regular locus and by $T_xX$ its tangent space at $x\in X$; consequently, the affine tangent cone is $\hat T_x X$. For a set $S\subset V$, let $\gener S$ denote its linear span, while for $S\subset \pe V$, let $\spn(S)$ denote its projective span, that is to say $\spn(S)=\pe \langle\hat S\rangle\subset \pe V$.
+
+We will use $\Seg$ to denote the (projective) Segre variety, considering it as $\Seg(\pe B\times\pe C)\subseteq  \pe(B\otimes C)= \pe(\Hom(B^*, C))$. The $r$-th secant variety of an $X\subseteq\pe^N$ (again as a projective variety) will be denoted $\sigma_r X$. In particular, the set of matrices of rank at most $r$ in $\Hom(B^*,C)$ is precisely $\hat\sigma_{r-1}\Seg(\pe B\times\pe C)$.
+
+Inside $B\otimes C$ or equivalently $\pe(B\otimes C)$, linear subspaces $E\subseteq B\times C = \Hom(B^*, C)$ (resp. $\pe E\subseteq \pe(B\otimes C)$) correspond to $A$-concise tensors $T\in A\otimes B\otimes C$ via $T\mapsto E:=T(A^*)$ with $T:A^*\to B\otimes C$ being the appropriate flattening of $T$. This correspondence is up to the $\GL(A)$-action on $A\otimes B\otimes C$.
+
+\subsection{Geometric rank}
+
+% define GR, give phrases like which rank locus \uv{achieves} the GR\dots
+
+\begin{definition}
+Consider a tensor $T\in A\otimes B\otimes C$ and its flattening $T:A^*\to B\otimes C$. We define the \emph{rank $r$ locus of $T$} as
+\[
+    Y^r_T := \set{[\alpha]\in\pe A^* \mid \rank T(\alpha)\leq j} = T^{-1}(T(\pe A^*)\cap \sigma_{r-1}\Seg(\pe B\times\pe C)).
+\]
+Subsequently, let us put
+\[
+    \GR(T) := \min_{r}\zav{\codim_{\pe A^*}(Y^r_T)+r}.
+\]
+Let us say that the \uv{rank $r$ locus of $T$ \emph{achieves} $\GR(T)$}, if the minimum defining $\GR(T)$ is attained by $\codim_{\pe A^*}(Y^r_T)+r$. We say that $T$ has \emph{degenerate geometric rank}, if $\GR(T)<\min\set{\dim A,\dim B,\dim C}$.
+\end{definition}
+This is merely one of several equivalent ways to define $\GR(T)$; in particular, $\GR(T)$ does not change if we work with one of the other two flattenings instead of $T:A^*\to B\otimes C$. See \cite[Sections 2 and 3]{kopparty-moshkovitz-zuiddam} for further details.
+
+Please beware that the indexing of sets $Y^r_T$ is reversed compared to the sets $\Sigma^A_j$ used in \cite{geng-landsberg} and the notation for the \emph{$(A,j)$-geometric rank} $\GR_{A,j}$. The translation between these notations is as follows:
+\begin{align*}
+    \Sigma^A_j &= Y^{\min\set{\dim B,\dim C}-j}_T,\\
+    \GR_{A,j} &= \dim A+\min\set{\dim B,\dim C}-1-\dim\Sigma^A_j-j \\&= \codim_{\pe A^*}\zav{Y^{\min\set{\dim B,\dim C}-j}_T}+(\min\set{\dim B,\dim C}-j).
+\end{align*}
+
+
 
 \section{Liftability}
+
+In this section, we wish to establish a tool to check whether a given tensor with degenerate $\GR$ is optimal in the following sense: if $\GR(T)$ is degenerate and achieved by $Y^r_T$, it might happen that $T$ is a degeneration of some $T'$ which also achieves a degenerate $\GR(T')$ with the analogous $Y^r_{T'}$. In such a situation, we might as well work with $T'$ instead of $T$, so we wish to detect when such a $T'$ does not exist.
+
+Since we are most interested in concise tensors, we work with the space $E=T(A^*)$ directly instead of $T$ itself. Further, since we will work with a fixed $r$, the extra $+r$ in $\codim_{\pe A^*}(Y^r_T)+r$ makes no matter, so we investigate when a linear space of matrices may be enlarged while preserving the codimension of its rank $r$ locus.
 
 \subsection{Statement}
 
 \begin{definition}
     Let us say a space of matrices $E\subseteq \Hom(B^*,C)$ is \emph{$r$-liftable}, if it is contained within a larger space $E'\supsetneq E$ such that
     \[
-        \codim_{\pe E}(\pe E\cap \sigma_r\Seg(\pe B\times\pe C)) = \codim_{\pe E'}({\pe E'}\cap \sigma_r\Seg(\pe B\times\pe C));
+        \codim_{\pe E}(\pe E\cap \sigma_{r-1}\Seg(\pe B\times\pe C)) = \codim_{\pe E'}({\pe E'}\cap \sigma_{r-1}\Seg(\pe B\times\pe C));
     \]
     let us then say that \emph{$E$ $r$-lifts to $E'$}.
     Otherwise, let us say $E$ is \emph{$r$-unliftable}.
 \end{definition}
 
 \begin{definition}
-    Consider a space of matrices $E\subseteq \Hom(B^*,C)$ that contains at least one matrix of rank $r$ and denote by $Y\subseteq \pe E$ the locus of matrices of rank at most $r$. Let $Y_1,\dots, Y_k$ be the irreducible components of $Y$ and let $\tilde Y_i$ be the locus of points $[e]\in Y_i$ which are regular points of $Y$ and have $\rank(e) = r$.  Then we define the \emph{set of rank-$r$ neutral directions} of $E$ as
+    Consider a space of matrices $E\subseteq \Hom(B^*,C)$ that contains at least one matrix of rank $r$ and denote by $Y:= \pe E\cap\sigma_{r-1}\Seg(\pe B\times\pe C)$ the locus of matrices of rank at most $r$, considered as an intersection scheme-theoretically. Let $Y_1,\dots, Y_k$ be the irreducible components of $Y$ and for each $i$, let $\tilde Y_i$ be the locus of points $[e]\in Y_i$ which are regular points of $Y$ and simultaneously have $\rank(e) = r$.  Then we define the \emph{set of rank-$r$-neutral directions} of $E$ as
     \[
-        \RND_r(E) := \bigcup_{1\leq i\leq r} \bigcap_{[e]\in \tilde Y_i} \zav{E + \set{M\in \Hom(B^*,C)\mid M(\ker e)\subseteq \im e}}.
+        \RND_r(E) := \bigcup_{1\leq i\leq k} \bigcap_{[e]\in \tilde Y_i} \zav{E + \set{M\in \Hom(B^*,C)\mid M(\ker e)\subseteq \im e}}.
 %         \RND_r(E) := \bigcap_{e\in E, \rank(e)=r} \zav{E + \set{M\in \Hom(B^*,C)\mid M(\ker e)\subseteq \im e}}
     \]
-    (If $\tilde Y_i=\emptyset$, we interpret the corresponding intersection as the entire space $V$.)
+    (If $\tilde Y_i=\emptyset$, we interpret the corresponding intersection as the entire space $\Hom(B^*,C)$.)
 \end{definition}
 %
 \begin{prop}
@@ -95,10 +143,10 @@ Suppose $X\subseteq\pe V$ is a projective variety. We denote by $\hat X\subseteq
 \end{prop}
 \begin{remark}
     \begin{enumerate}
-        \item The Proposition may be useful either as a criterion of non-liftability, or as a tool which \uv{hints} at a possible lift. This latter option is most plausible if $Y$ happens to be irreducible and $\RND_r(E)$ is a linear space of dimension $\dim E+1$, since then the only possible lift is $E':=\RND_r(E)$ itself.
-        \item In practice, one will wish to only use some choice of finitely many $[e]\in\tilde Y_i$ in each of the intersections in the definition $\RND_r(E)$, any such choice will give a superset of $\RND_r(E)$, i.e. a valid albeit potentially weaker \uv{hint}. See Section~\ref{sec:examples} for examples of this.
+        \item The Proposition may be useful either as a criterion of unliftability, or as a tool which \uv{hints} at a possible lift. This latter option is most useful if $Y$ happens to be irreducible and $\RND_r(E)$ is a linear space of dimension $\dim E+1$, since then the only possible lift is $E':=\RND_r(E)$ itself.
+        \item In practice, one will wish to only use some choice of finitely many $[e]\in\tilde Y_i$ in each of the intersections in the definition of $\RND_r(E)$: any such choice will give a superset of $\RND_r(E)$, i.e. a valid albeit potentially weaker \uv{hint}. See Section~\ref{sec:examples} for examples of this.
 
-        An algorithmic implementation might choose a reasonable number of points $[e]$ randomly from $Y_i$, since a generic point of $Y_i$ ought to lie in $\tilde Y_i$ unless $\tilde Y_i$ is empty.
+        An algorithmic implementation might choose a reasonable number of points $[e]$ randomly from $Y_i$, since a general point of $Y_i$ ought to lie in $\tilde Y_i$ unless $\tilde Y_i$ is empty.
     \end{enumerate}
 \end{remark}
 % Note: I hope the irreducibility condition could be replaced by something less demanding, but I have not figured out a good way to do it yet, so I leave it for now.
@@ -106,7 +154,7 @@ Suppose $X\subseteq\pe V$ is a projective variety. We denote by $\hat X\subseteq
 
 \subsection{Proof}
 
-Let us generalize the approach and proof of \cite[Section 3]{draisma}. As in there, we generalize by replacing $\sigma_r \Seg(\pe B\times\pe C)$ with an arbitrary projective variety. Consider a projective variety $X\subseteq \pe V$ and a linear subspace $E\subseteq V$ with the property that $\codim_{\pe E}(X \cap \pe E) = m$. Whenever $E'\supseteq E$ is a larger space, $\codim_{\pe E'}(X\cap \pe E')$ will be at least $m$. We wish to provide a criterion for when $E$ is inclusion-maximal among spaces with $\codim_{\pe E}(X\cap \pe E)=m$.
+Let us generalize the approach and proof of \cite[Section 3]{draisma}. As in there, we generalize by replacing $\sigma_{r-1} \Seg(\pe B\times\pe C)$ with an arbitrary projective variety. Consider a projective variety $X\subseteq \pe V$ and a linear subspace $E\subseteq V$ with the property that $\codim_{\pe E}(X \cap \pe E) = m$. Whenever $E'\supseteq E$ is a larger space, $\codim_{\pe E'}(X\cap \pe E')$ will be at least $m$. We wish to provide a criterion for when $E$ is inclusion-maximal among spaces with $\codim_{\pe E}(X\cap \pe E)=m$.
 
 \begin{definition}
     Let us say $E$ is \emph{$X$-liftable} (resp. \emph{$X$-unliftable}) if it is contained in some (resp. is not contained in any) $E'\supsetneq E$ such that
@@ -179,11 +227,11 @@ this is an affine variety in $V$. Note that trivially $E\subseteq U$. On the oth
 
 \begin{lemma}[{\cite[Lemma 9.]{draisma}}]
     \label{lem:secant-segre-tangent}
-    The regular locus of $\sigma_r\Seg(\pe B\times\pe C)$ consists precisely of points $[e]$ corresponding to rank $r$ matrices $e$ and the tangent cone at $[e]$ is given by \[\hat T_{[e]}\sigma_r\Seg(\pe B\times\pe C) = \set{M\in \Hom(B^*, C)\mid M(\ker e)\subseteq \im e}.\]
+    The regular locus of $\sigma_{r-1}\Seg(\pe B\times\pe C)$ consists precisely of points $[e]$ corresponding to rank $r$ matrices $e$ and the tangent cone at $[e]$ is given by \[\hat T_{[e]}\sigma_{r-1}\Seg(\pe B\times\pe C) = \set{M\in \Hom(B^*, C)\mid M(\ker e)\subseteq \im e}.\]
 \end{lemma}
 
 \begin{proof}[Proof of Proposition~\ref{prp:main-liftability}]
-    Follows by taking $X:= \sigma_r \Seg(\pe B\times\pe C)$ in Corollary~\ref{cor:criterion} and applying Lemma~\ref{lem:secant-segre-tangent}.
+    Follows by taking $X:= \sigma_{r-1} \Seg(\pe B\times\pe C)$ in Corollary~\ref{cor:criterion} and applying Lemma~\ref{lem:secant-segre-tangent}.
 \end{proof}
 
 
@@ -196,17 +244,27 @@ this is an affine variety in $V$. Note that trivially $E\subseteq U$. On the oth
 
 
 
-\section{Examples}
+\section{Examples of degenerate $\GR$}
 \label{sec:examples}
+
+One of the goals of the workshop project was to find \uv{interesting} examples of degenerate geometric rank, i.e. tensors with degenerate $\GR$ where this degeneracy is achieved by some locus that is not just a linear space of matrices of bounded rank. Let us overview the examples we know.
 
 \subsection{Matrix multiplication}
 
-\begin{example}[$M_{\gener2}$ is $2$-unliftable]
-    Let us consider the space of matrices considering to the $2\times2$ matrix multiplication tensor, i.e.
+\begin{example}[$M_{\gener n}$ is $rn$-unliftable]
+% By \cite[Section 6]{kopparty-moshkovitz-zuiddam}, the matrix multiplication tensor $M_{\gener n}\in \ce^{n^2}\otimes\ce^{n^2}\otimes\ce^{n^2}$ has geometric rank $\ceil{\frac34 n^2}$, which is degenerate. Further, the proof of \cite[Theorem 6.1]{kopparty-moshkovitz-zuiddam} implies that $\GR(M_{\gener n}$) is achieved by rank $n\floor{\frac n2}$ and $n\ceil{\frac n2}$ loci.
+    Let us consider the space of matrices $E$ corresponding to the $n\times n$ matrix multiplication tensor. This consists of matrices for the form
     \[
-        E := \set{\mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w},\quad x,y,z,w\in\ce}.
+        e_A := \mtrx{A&&&\\&A&&\\&&\ddots&\\&&&A} \in \Hom(\ce^{n^2}, \ce^{n^2})\qquad \text{for $A\in\Hom(\ce^n, \ce^n)$.}
     \]
-    This intersects $\hat\sigma_2\Seg$ in the hypersurface $xw-yz=0$. This irreducible, so we may use Proposition~\ref{prp:main}. Let us show that $E=\RND_2(E)$ and therefore that $E$ is $2$-unliftable. For this, let us choose in the intersection defining $\RND_2(E)$ the matrices
+    Clearly, $\rank(e_A) = n \rank(A)$, so only ranks $rn$ for $r=\rank(A)\in\set{0,\dots,n}$ occur.
+
+    The locus $Y^{rn}:=Y^{rn}_{M_{\gener n}}$ of matrices of rank at most $rn$ in $\pe E$ corresponds to $\rank(A)\leq r$, hence it is a copy of $\sigma_{r-1}\Seg(\pe^{n-1}\times\pe^{n-1})$ embedded linearly in $\pe(\Hom(\ce^{n^2}, \ce^{n^2}))$. This is irreducible and has codimension $(n-r)^2$ in $\pe\Hom(\ce^n,\ce^n)$, hence it contributes $(n-r)^2+rn = n^2-rn+r^2$ the minimum that defines $\GR(M_{\gener n})$. This attains its minimum $\GR(M_{\gener n})=\ceil{\frac34n^2}$ at $r=\floor{\frac n2}$ and $r=\ceil{\frac n2}$ (cf. \cite[Theorem 6.1]{kopparty-moshkovitz-zuiddam}).
+
+    Let us show that in fact for every $0<r<n$, the space $E$ is $rn$-unliftable. Since $Y^{rn}$ is irreducible and its regular locus consists of $e_A$ for $\rank(A)=r$, we just need to exhibit a collection of $e_A$'s such that their corresponding $E+\hat T_{[e_A]}\sigma_{rn-1}\Seg(\pe^{n^2-1}\times\pe^{n^2}-1)$ intersect to $E$. Let us pick all possible matrices $A$ that contain $r$ ones, each in distinct row and column, and zeros everywhere else. To see we reach $E$ as the intersection, view $n^2\times n^2$ matrices written using $n\times n$ of size $n\times n$.
+    Then $\hat T_{[e_A]}\sigma_{rn-1}\Seg(\pe^{n^2-1}\times\pe^{n^2}-1)$ will allow arbitrary entries in any row or column with a one, whereas $E$ will force the remaining entries to either be zero, if they are in an off-diagonal block, or to agree across different diagonal blocks. Taking the conjuction of such conditions over all choices of $A$, we see that off-diagonal blocks must be zero and the diagonal blocks must be the same, which is exactly the description of $E$.
+
+    To visualise this better, let us see an example for $n=2$, $r=1$: there, our chosen matrices $e_A$ will be
     \begin{align*}
         e_1 &= \mtrx{1&0&&\\0&0&&\\&&1&0\\&&0&0}, &
         e_2 &= \mtrx{0&1&&\\0&0&&\\&&0&1\\&&0&0}, \\
@@ -215,60 +273,385 @@ this is an affine variety in $V$. Note that trivially $E\subseteq U$. On the oth
     \end{align*}
     We then compute
     \begin{align*}
-        E+\hat T_{[e_1]}\sigma_r\Seg &= \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} + \mtrx{*&*&*&*\\ *&0&*&0\\ *&*&*&*\\ *&0&*&0} = \mtrx{*&*&*&*\\ *&w&*&0\\ *&*&*&*\\ *&0&*&w}
+        E+\hat T_{[e_1]}\sigma_1\Seg(\pe^3\times\pe^3) &= \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} + \mtrx{*&*&*&*\\ *&0&*&0\\ *&*&*&*\\ *&0&*&0} = \mtrx{*&*&*&*\\ *&w&*&0\\ *&*&*&*\\ *&0&*&w}
     \end{align*}
     and analogously
     \begin{align*}
-        E+\hat T_{[e_2]}\sigma_r\Seg &= \mtrx{
+        E+\hat T_{[e_2]}\sigma_1\Seg(\pe^3\times\pe^3) &= \mtrx{
             *&*&*&*\\
             z&*&0&*\\
             *&*&*&*\\
             0&*&z&*
-        },&
-        E+\hat T_{[e_3]}\sigma_r\Seg &= \mtrx{
+        },\\
+        E+\hat T_{[e_3]}\sigma_1\Seg(\pe^3\times\pe^3) &= \mtrx{
             *&y&*&0\\
             *&*&*&*\\
             *&0&*&y\\
             *&*&*&*
-        },&
-        E+\hat T_{[e_4]}\sigma_r\Seg &= \mtrx{
+        },\\
+        E+\hat T_{[e_4]}\sigma_1\Seg(\pe^3\times\pe^3) &= \mtrx{
             x&*&0&*\\
             *&*&*&*\\
             0&*&x&*\\
             *&*&*&*
         },
     \end{align*}
-    whence intersecting gives $\RND_2(E)\subseteq \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} = E$ as wanted.
+    whence intersecting gives
+    \[
+    \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} = E.
+    \]
 \end{example}
 
 
 \subsection{Other structure tensors}
 
+\begin{example}[octonions]
+Let $T_{\oct}\in \ce^8\otimes\ce^8\otimes\ce^8$ be the structure tensor of the octonions $\oct$. (Perhaps more precisely, we should call it the structure tensor of $\oct\otimes_{\er}\ce$.) Explicitly, the corresponding space of matrices may be written as
+\[
+    \mtrx{
+        x_0 &  x_1 &  x_2 &  x_3 &  x_4 &  x_5 &  x_6 &  x_7\\
+        x_1 & -x_0 &  x_3 & -x_2 &  x_5 & -x_4 & -x_7 &  x_6\\
+        x_2 & -x_3 & -x_0 & -x_1 &  x_6 &  x_7 & -x_4 & -x_5\\
+        x_3 &  x_2 & -x_1 & -x_0 &  x_7 & -x_6 &  x_5 & -x_4\\
+        x_4 & -x_5 & -x_6 & -x_7 & -x_0 &  x_1 &  x_2 &  x_3\\
+        x_5 &  x_4 & -x_7 &  x_6 & -x_1 & -x_0 & -x_3 &  x_2\\
+        x_6 &  x_7 &  x_4 & -x_5 & -x_2 &  x_3 & -x_0 & -x_1\\
+        x_7 & -x_6 &  x_5 &  x_4 & -x_3 & -x_2 &  x_1 & -x_0
+    }.
+\]
+An non-zero element of this space either has rank $4$ if $\sum x_i^2 = 0$, or $8$ otherwise. In particular, it means the rank $4$ locus is $7$-dimensional, which results in $\GR(T_{\oct}) = (8-7)+4 = 5$. Note that the rank $4$ locus has a neat algebraic interpretation: the hypersurface is given by the vanishing of the octonion \emph{norm}, which is multiplicative (despite octonions being non-associative).
+
+Computationally, we have verified that the rank $4$ locus (being the only interesting one) is unliftable.
+\end{example}
+
+The octonions can be viewed as a member of the larger family of Cayley-Dickson algebras, this comes about inductively by using an $n$-dimensional algebra $A$ to construct a $2n$-dimensional algebra. In the classical setting over the reals, the sequence starts with real numbers, complex numbers, quaternions, octonions etc. The $2\times2$ matrix multiplication tensor actually comes up here, because over the complex numbers, the quaternions $\mathbb H\otimes_{\er}\ce$ are isomorphic to the algebra of $2\times 2$ matrices. Unfortunately though, it seems that as progressive Cayley-Dickson algebras lose nice algebraic properties (e.g., starting with the $16$-dimensional \emph{sedenions}, the norm is no longer multiplicative), their structure tensors stop having high-dimensional low-rank loci.
+
 \subsection{Minimal border rank}
+
+Tensors of minimal border may be good source of examples of degenerate geometric rank. In $\ce^m\otimes\ce^m\otimes\ce^m$ for $m\leq 5$, these have been classified in \cite[Section 4]{jagiella-jelisiejew}. Going through the list and adopting the notation therein, we may see non-linear degenerate rank loci for the following $8$ tensors; for each, we list the loci for all non-trivial ranks which occur in the space:
+\begin{itemize}
+    \item The tensor
+    \[
+        T_{1,10} = \mtrx{
+            x_0 & 0 & 0 & 0 & 0 \\
+            0 & x_0 & 0 & 0 & 0 \\
+            0 & 0 & x_0 & 0 & 0 \\
+            0 & x_1 & x_3 & x_0 & 0 \\
+            0 & x_2 & x_4 & 0 & x_0 \\
+        }
+    \]
+    has a rank $2$ locus given by the ideal $(x_0)$ and a rank $1$ locus given by $(x_0, x_2x_3-x_1x_4)$. The geometric rank is $3$ and it is achieved by both of the above loci.
+
+    \item The tensor
+    \[
+        T_{1,11} = \mtrx{
+            x_0 & 0 & 0 & 0 & 0 \\
+            0 & x_0 & 0 & 0 & 0 \\
+            0 & 0 & x_0 & 0 & 0 \\
+            x_2 & x_3 & x_4 & x_0 & 0 \\
+            x_1 & x_2 & x_3 & 0 & x_0
+        }
+    \]
+    has a rank $2$ locus given by $(x_0)$ and a rank $1$ locus given by $(x_0, x_3^2-x_2x_4, x_2x_3-x_1x_4, x_2^2-x_1x_3)$. The geometric rank is $3$ and it is achieved solely by the linear rank $2$ locus, with the rank $1$ locus only contributing $4$ to the geometric rank.
+
+    \item The tensor
+    \[
+        T_{1,12} = \mtrx{
+            x_0 & 0 & 0 & 0 & 0 \\
+            0 & x_0 & 0 & 0 & 0 \\
+            0 & 0 & x_0 & 0 & 0 \\
+            x_1 & 0 & x_4 & x_0 & 0 \\
+            x_2 & x_3 & x_1 & 0 & x_0
+        }
+    \]
+    has a rank $2$ locus given by $(x_0)$ and a rank $1$ locus given by $(x_0, x_3x_4, x_1x_3, x_1^2-x_2x_4)$. This rank $1$ locus thus has two components $(x_0,x_3, x_1^2-x_2x_4)$ and $(x_0, x_1,x_4)$. The geometric rank is $3$ and it is achieved solely by the linear rank $2$ locus, with the rank $1$ locus only contributing $4$ to the geometric rank.
+
+    \item The tensor
+    \[
+        T_{1,19} = \mtrx{
+            x_0 & 0 & 0 & 0 & 0 \\
+            0 & x_0 & 0 & 0 & 0 \\
+            x_1 & 0 & x_0 & 0 & 0 \\
+            x_3 & x_4 & 0 & x_0 & 0 \\
+            x_2 & x_3 & x_1 & 0 & x_0
+        }
+    \]
+    has a rank $3$ locus given by $(x_0)$, a rank $2$ locus given by $(x_0, x_1x_4)$ and a rank $1$ locus given by $(x_0,x_1,x_3^2-x_2x_4)$. The geometric rank is $4$, achieved by all three of the above loci.
+
+    \item The tensor
+    \[
+        T_{2,7} = \mtrx{
+            x_0 & 0 & 0 & 0 & 0 \\
+            0 & x_0 & 0 & 0 & 0 \\
+            x_1 & x_2 & x_0 & 0 & 0 \\
+            x_3 & -x_1 & 0 & x_0 & 0 \\
+            0 & 0 & 0 & 0 & x_0 + x_4
+        }
+    \]
+    has a rank $3$ locus given by $(x_0)$, a rank $2$ locus given by $(x_0, x_1^2x_4+x_2x_3x_4)$ and a rank $1$ locus given by $(x_0, x_3x_4,x_2x_4, x_1x_4, x_1^2+x_2x_3)$; the rank $2$ locus has two components $(x_0,x_4)$ and $(x_0,x_1^2+x_2x_3)$, while the rank $1$ locus has two components $(x_0,x_4,x_1^2+x_2x_3)$ and $(x_0,x_1,x_2,x_3)$. The geometric rank is $4$, achieved by all three of the above loci.
+
+    \item The tensor
+    \[
+        T_{\O_{58}} = \mtrx{
+            x_0 & 0 & x_1 & x_2 & x_4 \\
+            x_4 & x_0 & x_3 & -x_1 & 0 \\
+            0 & 0 & x_0 & 0 & 0 \\
+            0 & 0 & - x_4 & x_0 & 0 \\
+            0 & 0 & 0 & x_4 & 0
+        }.
+    \]
+    or rather the space of matrices, is of bounded rank $4$. It further has a rank $2$ locus $(x_0,x_4)$ and a rank $1$ locus $(x_0,x_4,x_1^2+x_2x_3)$. The geometric rank is $4$, achieved by all three of the above loci.
+
+    \item The tensor
+    \[
+        T_{\O_{57}} = \mtrx{
+            x_0 & 0 & x_1 & x_2 & x_4 \\
+            0 & x_0 & x_3 & -x_1 & 0 \\
+            0 & 0 & x_0 & 0 & 0 \\
+            0 & 0 & 0 & x_0 & 0 \\
+            0 & 0 & 0 & x_4 & 0
+        }
+    \]
+    is space of matrices of bounded rank $4$. It further has a rank $3$ locus given by $(x_0)$, a rank $2$ locus given by $(x_0,x_3x_4)$ and a rank $1$ locus given by $(x_0,x_4,x_1^2+x_2x_3)$. The geometric rank is $4$, achieved by all four of the above loci.
+
+    \item The tensor
+    \[
+        U_{2,7} = \mtrx{
+            x_0 & 0 & 0 & 0 \\
+            0 & x_0 & 0  & 0 \\
+            x_1 & x_2 & x_0 & 0 \\
+            x_3 & -x_1 & 0 & x_0
+        }
+    \]
+    has a rank $2$ locus $(x_0)$ and a rank $1$ locus $(x_0, x_1^2+x_2x_3)$. The geometric rank is $3$, achieved by both of the above loci.
+\end{itemize}
+Overall, we see that, slightly disappointingly, we find no examples of degenerate geometric rank being achieved solely by a non-linear locus, there is always a linear locus which achieves the geometric rank jointly with the non-linear locus.
+
+We may also note that the examples are consistent with the result of Section~\ref{sec:rank-one-degeneracies}: in each case when the rank $1$ locus achieves the geometric rank, it either contains a linear space, or it contains a copy of $\pe S^2\ce^2 \cap \Seg(\pe^1\times\pe^1)$, in which case the rank $2$ locus also achieves the geometric rank, as Proposition~\ref{prp:pawel} predicts.
+
+
 
 \subsection{Representation-theoretic constructions}
 
+\TODO{Derek's constructions, whether/how they lift and representation-theoretic motivations}
+
+\[
+    E_6 := \mtrx{
+        2x_3 & 2x_4 & 2x_5 & 0 & 0 & 0 \\
+        -x_1 & -x_2 &    0 & x_4 & 2x_5 & 0 \\
+        0 & -x_1 & -x_2 & -2x_3 & -x_4 & 0 \\
+        2x_0 & 0 & 0 & -2x_2 & 0 & 2x_5 \\
+        0 & 2x_0 & 0 & x_1 & -x_2 & -x_4 \\
+        0 & 0 & 2x_0 & 0 & 2x_1 & 2x_3
+    }
+\]
+
+
+\[
+    E_7 := \mtrx{
+        -3x_3 & -12x_4 & -30x_5 & -60x_6 &      0 &      0 &      0 \\
+        2x_2 &   3x_3 &      0 & -10x_5 & -30x_6 &      0 &      0 \\
+        -2x_1 &      0 &   3x_3 &   4x_4 &      0 & -12x_6 &      0 \\
+        3x_0 &  -3x_1 &  -3x_2 &      0 &   3x_4 &   3x_5 &  -3x_6 \\
+        0 &  12x_0 &      0 &  -4x_2 &  -3x_3 &      0 &   2x_5 \\
+        0 &      0 &  30x_0 &  10x_1 &      0 &  -3x_3 &  -2x_4 \\
+        0 &      0 &      0 &  60x_0 &  30x_1 &  12x_2 &   3x_3
+    }
+\]
+
+By a computer calculation of the liftability criterion, we manage to recognize that $E_7$ is $4$-liftable, with only one lift possible. After further lifts in the other two flattenings, $E_7$ actually lifts to an $8\times 8\times 8$ tensor which is equivalent to the structure tensor of octonions, $T_{\oct}$.
 
 
 
 
-\section{$\GR_{A,n-1}$}
+\section{Rank $1$ locus achieving GR}
+\label{sec:rank-one-degeneracies}
+
+\subsection{Statement}
+
+A simple way for the rank $1$ locus to achieve geometric rank is for the whole $\pe T(A^*)$ to in fact be contained inside the Segre variety. Another, slightly less simple example if when $B=C$ is two-dimensional and $\pe T(A^*)=\pe^2$ is the space of symmetric $2\times2$ matrices. There, the rank $1$ locus becomes the curve of rank $1$ symmetric matrices. There, both the rank $1$ locus (curve) and the rank $2$ locus (everything) achieve
+\[
+    \GR(T) = 1+1 = 0+2 = 2.
+\]
+The following proposition shows that in a sense, the above two are the only ways for the rank $1$ locus to achieve geometric rank:
+
+\begin{prop}
+    \label{prp:pawel}
+    If the rank $1$ locus of $T\in A\otimes B\otimes C$ achieves $\GR(T)$, at least one of the following holds:
+    \begin{enumerate}[label={\textup{(\alph*)}}]
+        \item $\pe T(A^*)$ contains a linear subspace of $\Seg(\pe B\times\pe C)$.
+        \item There exists a quotient $A\surjto A'$ such that $T((A')^*)$ is equivalent in the $\GL(B)\times\GL(C)$ action to the space of symmetric $2\times 2$ matrices; morover, the rank $2$ locus of $T$ also achieves $\GR(T)$.
+    \end{enumerate}
+\end{prop}
+As a consequence of the result about the rank $2$ locus in part (b), the Theorem implies that if $r=1$ is the only $r$ for which the rank $r$ locus of $T$ achieves $\GR(T)$, it is guaranteed that (a) occurs.
 
 
 
+\subsection{Proof}
+
+A trivial example of when the rank $1$ locus might achieve $\GR(T)$ is when in fact the whole $\pe T(A^*)$ is a subspace of the Segre variety. Another, slightly less trivial way might be to take $B=C$ two-dimensional and $T(A^*)$ the space of symmetric $2\times2$ matrices. After projectivizing, this is a $\pe^2$, trivially of bounded rank $2$, intersects Segre in a curve. Then both the rank $1$ locus (curve) and the rank $2$ locus (everything) achieve
+\[
+    \GR(T) = 1+1 = 0+2 = 2.
+\]
+Our following proposition shows that in a sense, these are the only two ways for the rank $1$ locus to achieve geometric rank:
+
+\begin{theorem}[Hopf]
+    \label{thrm:hopf}
+    Let $\phi: U \otimes V \to W$ be a linear map of $\ce$-vector spaces that is injective after restriction to subspaces of the form $s \otimes V$, $U \otimes s$ for $s\neq0$ in $U$, $V$ respectively. Then
+    \[ \dim(\im(\phi)) \geq \dim(U) + \dim(V) -1. \]
+\end{theorem}
+\begin{proof}
+    See \cite[Proposition 1.3]{smith}.
+\end{proof}
+
+\begin{lemma}
+    \label{lem:curve}
+    Let $X$ be an irreducible curve contained in $\Seg(\pe B\times\pe C)\subset \pe(B\otimes C)$ and let us equip $\Seg(\pe B\times \pe B)$ with the projections
+    \[
+        \pr_B: \Seg(\pe B\times \pe B)\to \pe B,\qquad \pr_C: \Seg(\pe B\times \pe B)\to \pe C.
+    \]
+    Then $\dim\spn(X)\geq \dim\spn(\pr_B X)+\dim\spn(\pr_C X)$.
+\end{lemma}
+\begin{proof}
+    Let $B'\subset B$, $C'\subset C$, $E\subset B\otimes C$ be vector subspaces such that $\pe B' = \spn(\pr_B C)$, $\pe C' = \spn(\pr_C X)$ and $\pe E=\spn(X)$, clearly $E\subset B'\otimes C'$. Let $\Hom(X,\ce)$ denote the space of Zariski-continuous functions $\hat X\to \ce$ and consider the function $\phi:(B')^*\otimes (C')^*\to E^*$ defined by the diagram
+    \[\begin{tikzcd}[column sep = 5em]
+        (B')^*\otimes (C')^* \arrow[rr, bend right, "\phi"]\arrow[r, phantom, yshift=.75em, "{\scriptstyle\text{multiplication}}"]\arrow[r, phantom, "\simeq"] & (B'\otimes C')^*\arrow[r, phantom, yshift=.75em, "{\scriptstyle\text{restriction}}"]\arrow[r] & E^*\arrow[r, phantom, yshift=.75em, "{\scriptstyle\text{restriction}}"]\arrow[r, hook, swap, "\rho"] & \Hom(\hat X,\ce).
+    \end{tikzcd}\]
+    Now we wish to apply Hopf's theorem on $\phi$. For this, we need to verify it is injective on subspaces of the form $s\otimes (C')^*$ or $(B')^*\otimes s$ for non-zero $s\in (B')^*$ resp. $s\in (C')^*$. This is equivalent to verifying that for non-zero $\beta\in(B')^*$ and $\gamma\in (C')^*$, the element $\phi(\beta\otimes\gamma)$ is non-zero in $E^*$. For this, it suffices to verify that $\rho(\phi(\beta\otimes\gamma))\neq0$. Taking a arbitrary point $b\otimes c\in \hat X\subset \widehat\Seg(\pe B\otimes \pe C)$, we have
+    \[
+        \rho(\phi(\beta\otimes\gamma))(b\otimes c) = \beta(b)\cdot\gamma(c).
+    \]
+    Since $\pr_B X$ spans $\pe B'$, the locus of points $b\otimes c\in \hat X$ with $\beta(b)=0$ is a proper open subset for each $\beta$. Analogously, the same happens for $\gamma$, hence the zero set of any single $\rho(\phi(\beta\otimes\gamma))$ is a union of two proper open subsets of $\hat X$, which is irreducible, hence this union cannot be the entirity of $X$. Thus $\rho(\phi(\beta\otimes\gamma))$ is non-zero somewhere on $\hat X$.
+
+    Applying Hopf's theorem now gives
+    \[
+        \dim E = \dim E^*\geq \dim(\im(\phi)) \stackrel{\text{Hopf}}{\geq} \dim(B')^*+\dim(C')^*-1 = \dim(B')+\dim(C')-1,
+    \]
+    which is equivalent to $\dim\pe E \geq \dim\pe B' + \dim\pe C'$, as we wished to prove.
+\end{proof}
+
+% \begin{definition}[cutting down]
+%     Let us say we \emph{cut down} a linear subspace $E\subseteq B\otimes C$ if we replace it by $E':=E\cap H$ for a general hyperplane $H\subseteq B\otimes C$.
+% \end{definition}
+
+\begin{lemma}
+    \label{lem:cuttingdown}
+    Suppose that the rank $1$ locus of $T\in A\otimes B\otimes C$ achieves $\GR(T)$ and this locus it at least one-dimensional. Then taking the restriction $T'$ of $T$ induced by $A\surjto A'$ where $(A')^*\subset A^*$ is a general hyperplane, the rank $1$ locus of $T'$ also achieves $\GR(T')$.
+\end{lemma}
+\begin{proof}
+    If suffices to show that $\codim_{\pe A^*}Y^r_{T} = \codim_{\pe (A')^*}Y^r_{T'}$ for each $r=1,2,\dots$, since then all inequalities between the minimands contributing to $\GR(T)$ resp. $\GR(T')$ will be preserved upon passing to $T'$.
+
+    Consider an irreducible projective variety $X\subset\pe^N$, for the sake of simplicity, suppose $\dim X>0$. Then $\dim(X\cap H)=\dim X-1$ for a general hyperplane $H\subseteq \pe^N$. Now, consider the rank loci $Y^1_T,Y^2_T,\dots$ and all of their positive dimensional irreducible components
+    \[
+        Y^1_1,Y^1_2,\dots,Y^1_{k_1},\quad Y^2_1,Y^2_2,\dots,Y^2_{k_2},\quad \dots
+    \]
+    Note that $Y^1_T\subseteq Y^r_T$ for all $r$ and $\dim Y^1_T\geq1$, so each of the loci in fact has at least one component of dimension $\geq1$.
+    Altogether, this is a finite collection of irreducible varieties, so a general hyperplane $H=:\pe(A')^*$ will intersect each of them in codimension $1$. Thus each rank locus will decrease its dimension by one upon the cut, leading to
+    \[
+        \codim_{\pe (A')^*}Y^r_{T'} = \codim_{H}\zav{Y^r_T\cap H} = (\dim\pe A^*-1) - \zav{\dim Y^r_T-1} = \codim_{\pe A^*}Y^r_T
+    \]
+    as we wished to prove.
+\end{proof}
+
+
+Now we may prove the main result:
+
+\begin{proof}[Proof of Proposition~\ref{prp:pawel}]
+    Without loss of generality, we assume $T$ is $A$-concise: otherwise we could restrict $T$ to a maximal subspace of $A^*$ not intersecting $\ker(T:A^*\to B\otimes C)$, which preserves each $\codim_{\pe A^*}(Y^r_T)+r$.
+
+    First, we consider the case when $\dim(\pe T(A^*)\cap \Seg(\pe B\times \pe C))=1$. Let $X$ be any one-dimensional irreducible component of $\pe T(A^*)\cap \Seg(\pe B\times \pe C)$ and denote $\pe E:=\spn(X)$. Further, we equip $\Seg(\pe B\times\pe C)$ with projections $\pr_B$, $\pr_C$ as before and denote $\pe B':=\spn(\pr_B X)$, $\pe C' := \spn(\pr_C X)$. Then Lemma~\ref{lem:curve} yields
+    \begin{equation}
+        \tag{$\ast$}
+        \dim\pe E \geq \dim\pe B' + \dim\pe C'.
+    \end{equation}
+    Let us extract a different inequality from the rank $1$ locus achieving $\GR(T)$ which significantly constrain the situation in conjuction with the above. We have
+    \[
+        \GR(T) = \codim_{\pe A^*} Y^1_T + 1 = \dim\pe A^*,
+    \]
+    since we assumed the rank $1$ locus in one-dimensional. On the other hand, $\pe E$ is contained both in $\pe T(A^*)$ and $\pe(B'\otimes C')$. Without loss of generality, we may assume $\dim B'\leq \dim C'$, hence matrices $B'\otimes C'$ are of bounded rank $\dim B'$. Thus $\pe E$ is contained within (the image under $T$ of) the rank $\dim B'$ locus, hence
+    \[
+        \codim_{\pe A^*}Y^{\dim B'}_T+\dim B' = \dim\pe A^* - \dim Y^{\dim B'}_T +\dim B' \leq \dim \pe A^* -\dim\pe E +\dim B'.
+    \]
+    Since the left hand side is an upper bound on $\GR(T)$, we conclude
+    \begin{align}
+        \nonumber
+        \dim \pe A^* &\leq \dim\pe A^* - \dim\pe E + \dim \pe B' + 1,\\
+        \tag{$\dag$}
+        \dim \pe E &\leq \dim\pe B'+1.
+    \end{align}
+    Putting ($\ast$) and ($\dag$) together, we extract
+    \[
+        \dim\pe B'+1 \geq \dim\pe B'+\dim\pe C',
+    \]
+    i.e. $1\geq\dim\pe C'\geq\dim\pe B'$. Further, we must have $\dim\pe(B'\otimes C')\geq\dim X = 1$, which implies at least on of $\pe B'$, $\pe C'$ is one-dimensional. Thus $\dim\pe C' = 1$ and $\dim\pe B'\in\set{0,1}$.
+
+    If $\dim\pe B' = 0$, then $X\subset\pe (B'\otimes C')$. Since both sides of the inclusion are one-dimensional, we see $X=\pe(B'\otimes C')$, hence $\pe T(A^*)$ indeed contains a linear subspace of the Segre variety, as posited by (a).
+
+    If $\dim\pe B' = 1$, let us assume $\pe E$ does not contain a subspace of the Segre variety and prove that it is, up to the $\GL(B)\times\GL(C)$ action, the space of $2\times2$ matrices, as posited by (b). First, let us observe that the restrictions of $\pr_B$, $\pr_C$ to $X$ are injective: if $\pr_C$ restricted to $X$ is not injective, we find two distinct $[b_1\otimes c], [b_2\otimes c]\in X$, hence $\pe E$ contains $\spn(\set{[b_1\otimes c], [b_2\otimes c]}) = \spn(\set{[b_1], [b_2]})\otimes c$, which is a linear subspace of the Segre variety, a contradiction.
+
+    Now, since $\pr_B$, $\pr_C$ (restricted to $X$) are injective projective homomorphisms and $\dim X = \dim \pe B' = \dim\pe C' = 1$, they must in fact be surjective, and so $X$ constitutes a graph of an isomorphism $\pe^1 = \pe B' \simeq \pe C' = \pe^1$. Such an isomorphism is given by an invertible $2\times 2$ modulo scalars (see e.g. \cite[15.5.A]{rising-sea}). By considering appropriate bases of $B'$ and $C'$, we may assume the isomorphism is given by the identity. But then is the curve of rank $1$ symmetric matrices inside $\Seg(\pe^1\times\pe^1)$ and its span $\pe E$ becomes the subspace of all symmetric $2\times 2$ matrices, which is what we wished to prove.
+
+    Moreover, since we reached an equality in ($\dag$) and we had $\dim B'=2$, we must have encountered an equality in
+    \[
+        \codim_{\pe A^*}(Y^2_T)+2 \leq \codim_{\pe A^*}Y^1_T + 1,
+    \]
+    which means the rank $2$ locus also achieved $\GR(T)$.
+
+
+    \bigskip
+    Now, we will prove the general case. If $\dim(\pe T(A^*)\cap \Seg(\pe B\times\pe C))=d$, let us choose $d-1$ general hyperplanes $H_1,\dots,H_{d-1}\subset B\otimes C$ and take the restriction $T'$ of $T$ induced by $A\surjto A'$ where $(A')^* = T^{-1}(T(A^*)\cap H_1\cap\cdots\cap H_{d-1})$. Then by Lemma~\ref{lem:cuttingdown} the rank $1$ locus of $T'$ still achieves $\GR(T')$ and we have
+    \[
+        \dim\Bigl(\pe T'((A')^*)\cap \Seg(\pe B\times\pe C)\Bigr) = \dim\Bigl(\pe T(A^*)\cap \Seg(\pe B\times\pe C)\cap \pe H_1\cap\cdots\cap \pe H_{d-1}\Bigr) = 1,
+    \]
+    since cutting a variety with a general hyperplane decreases dimension by one.
+    Hence by the above special case we have already proven, the conclusion of the present Proposition holds for $T'$. Therefore, there is a linear subspace of $\Seg(\pe B\times \pe C)$ (for option (a)) or a subspace equivalent to $2\times 2$ matrices (for option (b)) contained in $\pe T'((A')^*) = \pe T((A')^*)$, so it is also contained in the larger space $\pe T(A^*)$. Lastly, we know that by cutting with general hyperplanes, the dimensions of all rank loci decreased by the same amount, so if $T'$ had (b) occur and the rank $2$ locus achieved $\GR(T')$, the same must have happened for $T$.
+\end{proof}
 
 
 
-\begin{thebibliography}{99}
+\def\arxiv#1{\href{https://arxiv.org/abs/#1}{arXiv:#1}}
+\begin{thebibliography}{KMZ}
 \bibitem[Dr]{draisma}
     Jan Draisma,
     \textit{Small maximal spaces of non-invertible matrices},
-    Bull. London Math. Soc. 38 (2006), no. 5,
+    Bull. London Math. Soc. 38 (2006), no.~5,
     764--776.
 
-\bibitem[HL]{huang-landsberg}
-    Hang Huang and J. M. Landsberg,
-    \textit{On linear spaces of matrices of bounded rank}.
+\bibitem[GL]{geng-landsberg}
+    Runshi Geng and Joseph M. Landsberg,
+    \textit{On the geometry of geometric rank},
+    Algebra Number Theory 16 (2022), no. 5, 1141–1160.
+
+% \bibitem[Ha]{hartshorne}
+%     Robin Hartshorne,
+%     \textit{Algebraic Geometry}, volume 52 of \emph{Graduate Texts in Mathematics},
+%     Springer-Verlag, 1977.
+
+% \bibitem[HL]{huang-landsberg}
+%     Hang Huang and J. M. Landsberg,
+%     \textit{On linear spaces of matrices of bounded rank},
+%     \arxiv{2306.14428}.
+
+\bibitem[JJ]{jagiella-jelisiejew}
+    Jakub Jagiełła and Joachim Jelisiejew,
+    \textit{Classification and degenerations of small minimal border rank tensors via modules},
+    \arxiv{2409.06025}.
+
+\bibitem[KMZ]{kopparty-moshkovitz-zuiddam}
+    Swastik Kopparty, Guy Moshkovitz and Jeroen Zuiddam,
+    \textit{Geometric Rank of Tensors and Subrank of Matrix Multiplication},
+    Discrete Analysis 2023:1, 25 pp.
+
+\bibitem[Sm]{smith}
+    Larry Smith,
+    \emph{Nonsingular Bilinear Forms, Generalized J Homomorphisms, and the Homotopy of
+Spheres I},
+    Indiana Univ. Math. J. 27 (1978), no.~5, 697--737.
+
+\bibitem[Va]{rising-sea}
+    Ravi Vakil,
+    \emph{The rising sea: Foundations of algebraic geometry},
+    Princeton University Press, 2025.
 
 \end{thebibliography}
 
