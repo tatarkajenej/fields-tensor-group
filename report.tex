@@ -46,8 +46,10 @@
 \DeclareMathOperator{\Seg}{Seg}
 \DeclareMathOperator{\GR}{GR}
 \DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\SL}{SL}
 \DeclareMathOperator{\pr}{pr}
 \DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\sgn}{sgn}
 
 \def\uv#1{``#1''}
 
@@ -78,7 +80,7 @@
 
 \subsection{Conventions and notation}
 For the sake of simplicity, let us work solely over $\ce$.
-We will use both projective and affine spaces, to this end, we will consider $\pe^N$ as some $\pe V$ for an $N$-dimensional vector space $V$. For any $0\neq v\in V$, we will use $[v]$ to denote the point in $\pe V$ corresponding to the line $\ce v$.
+We will use both projective and affine spaces, to this end, we will consider $\pe^N$ as some $\pe V$ for an $(N+1)$-dimensional vector space $V$. For any $0\neq v\in V$, we will use $[v]$ to denote the point in $\pe V$ corresponding to the line $\ce v$.
 
 Suppose $X\subseteq\pe V$ is a projective variety. We denote by $\hat X\subseteq V$ its affine cone, by $X_\reg$ its regular locus and by $T_xX$ its tangent space at $x\in X$; consequently, the affine tangent cone is $\hat T_x X$. For a set $S\subset V$, let $\gener S$ denote its linear span, while for $S\subset \pe V$, let $\spn(S)$ denote its projective span, that is to say $\spn(S)=\pe \langle\hat S\rangle\subset \pe V$.
 
@@ -93,21 +95,35 @@ Inside $B\otimes C$ or equivalently $\pe(B\otimes C)$, linear subspaces $E\subse
 \begin{definition}
 Consider a tensor $T\in A\otimes B\otimes C$ and its flattening $T:A^*\to B\otimes C$. We define the \emph{rank $r$ locus of $T$} as
 \[
-    Y^r_T := \set{[\alpha]\in\pe A^* \mid \rank T(\alpha)\leq j} = T^{-1}(T(\pe A^*)\cap \sigma_{r-1}\Seg(\pe B\times\pe C)).
+    Y^r_T := \set{[\alpha]\in\pe A^* \mid \rank T(\alpha)\leq r} = T^{-1}\bigl(T(\pe A^*)\cap \sigma_{r-1}\Seg(\pe B\times\pe C)\bigr).
 \]
 Subsequently, let us put
 \[
-    \GR(T) := \min_{r}\zav{\codim_{\pe A^*}(Y^r_T)+r}.
+    \GR(T) := \min_{r}\bigl(\codim_{\pe A^*}(Y^r_T)+r\bigr).
 \]
 Let us say that the \uv{rank $r$ locus of $T$ \emph{achieves} $\GR(T)$}, if the minimum defining $\GR(T)$ is attained by $\codim_{\pe A^*}(Y^r_T)+r$. We say that $T$ has \emph{degenerate geometric rank}, if $\GR(T)<\min\set{\dim A,\dim B,\dim C}$.
 \end{definition}
 This is merely one of several equivalent ways to define $\GR(T)$; in particular, $\GR(T)$ does not change if we work with one of the other two flattenings instead of $T:A^*\to B\otimes C$. See \cite[Sections 2 and 3]{kopparty-moshkovitz-zuiddam} for further details.
 
-Please beware that the indexing of sets $Y^r_T$ is reversed compared to the sets $\Sigma^A_j$ used in \cite{geng-landsberg} and the notation for the \emph{$(A,j)$-geometric rank} $\GR_{A,j}$. The translation between these notations is as follows:
+Please beware that the indexing of sets $Y^r_T$ is reversed compared to the sets $\Sigma^A_j$ used in \cite{geng-landsberg} and the notation for the \emph{$(A,j)$-geometric rank} $\GR_{A,j}$. The translation between these is as follows:
 \begin{align*}
     \Sigma^A_j &= Y^{\min\set{\dim B,\dim C}-j}_T,\\
     \GR_{A,j} &= \dim A+\min\set{\dim B,\dim C}-1-\dim\Sigma^A_j-j \\&= \codim_{\pe A^*}\zav{Y^{\min\set{\dim B,\dim C}-j}_T}+(\min\set{\dim B,\dim C}-j).
 \end{align*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -124,7 +140,7 @@ Since we are most interested in concise tensors, we work with the space $E=T(A^*
     \[
         \codim_{\pe E}(\pe E\cap \sigma_{r-1}\Seg(\pe B\times\pe C)) = \codim_{\pe E'}({\pe E'}\cap \sigma_{r-1}\Seg(\pe B\times\pe C));
     \]
-    let us then say that \emph{$E$ $r$-lifts to $E'$}.
+    let us then say that $E'$ is an \emph{$r$-lift of $E$} (or \emph{$E$ $r$-lifts to $E'$}).
     Otherwise, let us say $E$ is \emph{$r$-unliftable}.
 \end{definition}
 
@@ -173,7 +189,7 @@ Let us generalize the approach and proof of \cite[Section 3]{draisma}. As in the
 \end{definition}
 \begin{remark}
     \begin{enumerate}
-    \item Note that in the simplest case when $Y=X\cap \pe E'$ is irreducible, the set of $X$-neutral directions simplifies to
+    \item Note that in the simplest case when $Y=X\cap \pe E$ is irreducible, the set of $X$-neutral directions simplifies to
     $\ND_X(E) = \bigcap_{e\in Y_\reg\cap X_\reg} (E+\hat T_e X)$ and is a linear subspace of $V$.
     \item If a $\tilde Y_i$ is empty, we interpret the intersection indexed by it as the whole space $V$.
     \end{enumerate}
@@ -191,7 +207,7 @@ this is an affine variety in $V$. Note that trivially $E\subseteq U$. On the oth
     $U\subseteq \ND_X(E)$.
 \end{lemma}
 \begin{proof}
-    Let us consider an arbitrary $v\in U$ and prove it lies in $\ND_X(E)$. For $v\in E$ this is trivial, so let us presume $v\notin E$ and denote $E':= E+v\ce$. This has $\dim E' = \dim E+1$, and so by the definition of $U$, denoting $d:=\dim(X\cap \pe E)$ we must have $\dim(X\cap \pe E') = d+1$. Therefore, $X\cap \pe E'$ has some irreducible component $Z$ of dimension $d+1$. Further, it must be the case that $\dim(Z\cap \pe E) = d$, so $Z\cap \pe E$ has an irreducible component of dimension $d$. Each irreducible component of $Z\cap \pe E$ must also be among the irreducible components of $X\cap \pe E$, so without loss of generality, assume $Y_1$ (in the notation of Definition~\ref{def:NDX}, so it has dimension $d$) is an irreducible component of $Z\cap\pe E$.
+    Let us consider an arbitrary $v\in U$ and prove it lies in $\ND_X(E)$. For $v\in E$ this is trivial, so let us presume $v\notin E$ and denote $E':= E+v\ce$. This has $\dim E' = \dim E+1$, and so by the definition of $U$, denoting $d:=\dim(X\cap \pe E)$ we must have $\dim(X\cap \pe E') = d+1$. Therefore, $X\cap \pe E'$ has some irreducible component $Z$ of dimension $d+1$. Further, it must be the case that $\dim(Z\cap \pe E) = d$, so $Z\cap \pe E$ has an irreducible component of dimension $d$. Each irreducible component of $Z\cap \pe E$ must also be among the irreducible components of $X\cap \pe E$, so without loss of generality, assume that, in the notation of Definition~\ref{def:NDX}, $Y_1$ is an irreducible component of $Z\cap\pe E$ and has dimension $d$.
 
     Consider any $e\in \tilde Y_1 = Y_1\cap Y_\reg\cap X_\reg$. Points in the intersection of two or more components of $Y$ are singular points of $Y$, hence no point of $\tilde Y_1$ lies on any other $Y_i$. Thereafter, a $y\in Y_1\setminus (Y_2\cup\cdots\cup Y_k)$ is a regular point of $Y_1$ if and only if it is a regular point of $Y$. Hence, $e$ is a regular point of $Y_1$.
 
@@ -244,6 +260,21 @@ this is an affine variety in $V$. Note that trivially $E\subseteq U$. On the oth
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Examples of degenerate $\GR$}
 \label{sec:examples}
 
@@ -259,10 +290,10 @@ One of the goals of the workshop project was to find \uv{interesting} examples o
     \]
     Clearly, $\rank(e_A) = n \rank(A)$, so only ranks $rn$ for $r=\rank(A)\in\set{0,\dots,n}$ occur.
 
-    The locus $Y^{rn}:=Y^{rn}_{M_{\gener n}}$ of matrices of rank at most $rn$ in $\pe E$ corresponds to $\rank(A)\leq r$, hence it is a copy of $\sigma_{r-1}\Seg(\pe^{n-1}\times\pe^{n-1})$ embedded linearly in $\pe(\Hom(\ce^{n^2}, \ce^{n^2}))$. This is irreducible and has codimension $(n-r)^2$ in $\pe\Hom(\ce^n,\ce^n)$, hence it contributes $(n-r)^2+rn = n^2-rn+r^2$ the minimum that defines $\GR(M_{\gener n})$. This attains its minimum $\GR(M_{\gener n})=\ceil{\frac34n^2}$ at $r=\floor{\frac n2}$ and $r=\ceil{\frac n2}$ (cf. \cite[Theorem 6.1]{kopparty-moshkovitz-zuiddam}).
+    The locus $Y^{rn}:=Y^{rn}_{M_{\gener n}}$ of matrices of rank at most $rn$ in $\pe E$ corresponds to $\rank(A)\leq r$, hence it is a copy of $\sigma_{r-1}\Seg(\pe^{n-1}\times\pe^{n-1})$ embedded linearly in $\pe(\Hom(\ce^{n^2}, \ce^{n^2}))$. This is irreducible and has codimension $(n-r)^2$ in $\pe\Hom(\ce^n,\ce^n)$, hence it contributes $(n-r)^2+rn = n^2-rn+r^2$ to the minimum that defines $\GR(M_{\gener n})$. This attains its minimum $\GR(M_{\gener n})=\ceil{\frac34n^2}$ at $r=\floor{\frac n2}$ and $r=\ceil{\frac n2}$ (cf. \cite[Theorem 6.1]{kopparty-moshkovitz-zuiddam}).
 
-    Let us show that in fact for every $0<r<n$, the space $E$ is $rn$-unliftable. Since $Y^{rn}$ is irreducible and its regular locus consists of $e_A$ for $\rank(A)=r$, we just need to exhibit a collection of $e_A$'s such that their corresponding $E+\hat T_{[e_A]}\sigma_{rn-1}\Seg(\pe^{n^2-1}\times\pe^{n^2}-1)$ intersect to $E$. Let us pick all possible matrices $A$ that contain $r$ ones, each in distinct row and column, and zeros everywhere else. To see we reach $E$ as the intersection, view $n^2\times n^2$ matrices written using $n\times n$ of size $n\times n$.
-    Then $\hat T_{[e_A]}\sigma_{rn-1}\Seg(\pe^{n^2-1}\times\pe^{n^2}-1)$ will allow arbitrary entries in any row or column with a one, whereas $E$ will force the remaining entries to either be zero, if they are in an off-diagonal block, or to agree across different diagonal blocks. Taking the conjuction of such conditions over all choices of $A$, we see that off-diagonal blocks must be zero and the diagonal blocks must be the same, which is exactly the description of $E$.
+    Let us show that in fact for every $0<r<n$, the space $E$ is $rn$-unliftable. Since $Y^{rn}$ is irreducible and its regular locus consists of $e_A$ for $\rank(A)=r$, we just need to exhibit a collection of $e_A$'s such that their corresponding $E+\hat T_{[e_A]}\sigma_{rn-1}\Seg(\pe^{n^2-1}\times\pe^{n^2}-1)$ intersect to $E$. Let us pick all possible matrices $A$ that contain $r$ ones, each in distinct row and column, and zeros everywhere else. To see we reach $E$ as the intersection, view $n^2\times n^2$ matrices written using $n\times n$ blocks of size $n\times n$.
+    Then $\hat T_{[e_A]}\sigma_{rn-1}\Seg(\pe^{n^2-1}\times\pe^{n^2}-1)$ will allow arbitrary entries in any row or column with a one, whereas $E$ will force the remaining entries to either be zero, if they are in an off-diagonal block, or to agree across different diagonal blocks. Taking the conjuction of such conditions $E+\hat T_{[e_A]}\sigma_{rn-1}\Seg(\pe^{n^2-1}\times\pe^{n^2}-1)$ over all choices of $A$, we see that off-diagonal blocks must be zero and the diagonal blocks must be the same, which is exactly the description of $E$.
 
     To visualise this better, let us see an example for $n=2$, $r=1$: there, our chosen matrices $e_A$ will be
     \begin{align*}
@@ -298,6 +329,7 @@ One of the goals of the workshop project was to find \uv{interesting} examples o
     \end{align*}
     whence intersecting gives
     \[
+    \RND_2(E) \subseteq
     \mtrx{x&y&&\\z&w&&\\&&x&y\\&&z&w} = E.
     \]
 \end{example}
@@ -319,7 +351,7 @@ Let $T_{\oct}\in \ce^8\otimes\ce^8\otimes\ce^8$ be the structure tensor of the o
         x_7 & -x_6 &  x_5 &  x_4 & -x_3 & -x_2 &  x_1 & -x_0
     }.
 \]
-An non-zero element of this space either has rank $4$ if $\sum x_i^2 = 0$, or $8$ otherwise. In particular, it means the rank $4$ locus is $7$-dimensional, which results in $\GR(T_{\oct}) = (8-7)+4 = 5$. Note that the rank $4$ locus has a neat algebraic interpretation: the hypersurface is given by the vanishing of the octonion \emph{norm}, which is multiplicative (despite octonions being non-associative).
+A non-zero element of this space either has rank $4$ if $\sum x_i^2 = 0$, or $8$ otherwise. In particular, it means the rank $4$ locus is $7$-dimensional, which results in $\GR(T_{\oct}) = (8-7)+4 = 5$. Note that the rank $4$ locus has a neat algebraic interpretation: the hypersurface is given by the vanishing of the octonion \emph{norm}, which is multiplicative (despite octonions being non-associative).
 
 Computationally, we have verified that the rank $4$ locus (being the only interesting one) is unliftable.
 \end{example}
@@ -433,33 +465,112 @@ We may also note that the examples are consistent with the result of Section~\re
 
 \subsection{Representation-theoretic constructions}
 
-\TODO{Derek's constructions, whether/how they lift and representation-theoretic motivations}
+We also have some examples coming from representation theory.
 
-\[
-    E_6 := \mtrx{
-        2x_3 & 2x_4 & 2x_5 & 0 & 0 & 0 \\
-        -x_1 & -x_2 &    0 & x_4 & 2x_5 & 0 \\
-        0 & -x_1 & -x_2 & -2x_3 & -x_4 & 0 \\
-        2x_0 & 0 & 0 & -2x_2 & 0 & 2x_5 \\
-        0 & 2x_0 & 0 & x_1 & -x_2 & -x_4 \\
-        0 & 0 & 2x_0 & 0 & 2x_1 & 2x_3
-    }
-\]
-
-
+\begin{example}
+The following tensor in $\ce^7\otimes\ce^7\otimes\ce^7$ is the unique (up to scale) invariant tensor in $(S_6\ce^2)^{\otimes3}$:
 \[
     E_7 := \mtrx{
-        -3x_3 & -12x_4 & -30x_5 & -60x_6 &      0 &      0 &      0 \\
-        2x_2 &   3x_3 &      0 & -10x_5 & -30x_6 &      0 &      0 \\
-        -2x_1 &      0 &   3x_3 &   4x_4 &      0 & -12x_6 &      0 \\
-        3x_0 &  -3x_1 &  -3x_2 &      0 &   3x_4 &   3x_5 &  -3x_6 \\
-        0 &  12x_0 &      0 &  -4x_2 &  -3x_3 &      0 &   2x_5 \\
+        0 &      0 &      0 &  60x_0 &  30x_1 &  12x_2 &   3x_3 \\
         0 &      0 &  30x_0 &  10x_1 &      0 &  -3x_3 &  -2x_4 \\
-        0 &      0 &      0 &  60x_0 &  30x_1 &  12x_2 &   3x_3
-    }
+        0 &  12x_0 &      0 &  -4x_2 &  -3x_3 &      0 &   2x_5 \\
+        3x_0 &  -3x_1 &  -3x_2 &      0 &   3x_4 &   3x_5 &  -3x_6 \\
+        -2x_1 &      0 &   3x_3 &   4x_4 &      0 & -12x_6 &      0 \\
+        2x_2 &   3x_3 &      0 & -10x_5 & -30x_6 &      0 &      0 \\
+        -3x_3 & -12x_4 & -30x_5 & -60x_6 &      0 &      0 &      0
+    }.
 \]
+Concretely, we may interpret it as $S_6\ce^2\to \Hom(S_6\ce^2, S_6\ce^2)$ by regarding $S_6\ce^2$ as binary forms of degree $6$ in variables $a$, $b$, with $x_i$ corresponding to $a^{6-i}b^i$ and a monomial $a^{6-i}b^i$ acting on a form $f$ followingly: interpret the monomial as a sixtuple $(m_1,\dots,m_6)\in \set{a,b}^6$ and denote
+\[
+    \partial_m = \begin{cases}
+        \frac{\partial}{\partial b}, & \text{if $m=a$,}\\
+        -\frac{\partial}{\partial a}, & \text{if $m=b$,}
+    \end{cases}
+\]
+then the result of the action is
+\[
+    \sum_{\set{i,j,k}\cup\set{u,v,w}=\set{1,\dots,6}} m_im_jm_k\, \partial_{m_u}\partial_{m_v}\partial_{m_w}f.
+\]
+As an example, consider $a^5b$ acting on $a^3b^3$. Looking at $a^5b$, there only two possibilities $a,a,a$ and $a,a,b$ for $m_u,m_v,m_w$ and each of these occurs $10$ times. Hence the action results in
+\[
+    10 a^3\zav{-\frac{\partial^3}{\partial b^2\partial a}} (a^3b^3) + 10a^2b \zav{\frac{\partial^3}{\partial b^3}} (a^3b^3) = -180a^5b + 60a^5b = -120a^b.
+\]
+In the matrix of linear forms describing $E_7$ above, we have divided by $40$ common to all the entries. Hence this example calculation justifies the entry $-3x_1$ in the fourth row (corresponds to $x_3\approx a^3b^3$) and second column (corresponds to $x_1\approx a^5b$).
 
-By a computer calculation of the liftability criterion, we manage to recognize that $E_7$ is $4$-liftable, with only one lift possible. After further lifts in the other two flattenings, $E_7$ actually lifts to an $8\times 8\times 8$ tensor which is equivalent to the structure tensor of octonions, $T_{\oct}$.
+As a space of matrices, $E_7$ is of bounded rank $6$. It further has a rank $4$ locus given by the hypersurface $(3x_3^2-8x_2x_4+20x_1x_5-120x_0x_7)$. This six-dimensional rank $4$ locus thus achieves $\GR(E_7) = 1+4=5$.
+
+By a computer calculation of the liftability criterion, we manage to recognize that $E_7$ is $4$-liftable, with only one lift possible. After further lifts in the other two flattenings, $E_7$ actually lifts to an $8\times 8\times 8$ tensor which is equivalent under the $(\GL_8)^3$-action to the structure tensor of octonions, $T_{\oct}$.
+\end{example}
+
+
+\begin{example}
+The following tensor in $\ce^6\otimes\ce^6\otimes\ce^6$ is the unique (up to scale) $\SL_3$-invariant tensor in $S_2\ce^3$:
+\[
+    E_6 := \mtrx{
+            0  &   0    & 0 &  2x_5 & 2x_4 & 2x_3 \\
+            0 & 2x_5   & x_4 &    0 &  -x_2 &  -x_1 \\
+            0 &  -x_4 & -2x_3 &  -x_2 &  -x_1 &    0 \\
+        2x_5  &   0 & -2x_2   &  0  &   0 & 2x_0 \\
+        -x_4  & -x_2  &  x_1  &   0 & 2x_0 &    0 \\
+        2x_3 & 2x_1  &   0 & 2x_0 &    0  &   0
+        % old version with column indexing reversed
+%         2x_3 & 2x_4 & 2x_5 & 0 & 0 & 0 \\
+%         -x_1 & -x_2 &    0 & x_4 & 2x_5 & 0 \\
+%         0 & -x_1 & -x_2 & -2x_3 & -x_4 & 0 \\
+%         2x_0 & 0 & 0 & -2x_2 & 0 & 2x_5 \\
+%         0 & 2x_0 & 0 & x_1 & -x_2 & -x_4 \\
+%         0 & 0 & 2x_0 & 0 & 2x_1 & 2x_3
+    }.
+\]
+Concretely, we may interpret it as $S_2\ce^3\to \Hom(S_2\ce^3, S_2\ce^3)$ by regarding $S_3\ce^3$ as quadratic forms in variables $y_1,y_2,y_3$, with the description above using the correspondence $(x_0,\dots,x_5)\approx(y_1^2, y_1y_2, y_1y_3,y_2^2,y_2y_3,y_3^2)$, followingly: $y_ay_b$ acts on $y_iy_j$ by considering the two possible pairings $\set{a,i},\set{b,j}$ or $\set{a,j},\set{b,i}$, each will contribute a (possible zero) term. For the former, if $a=i$ or $b=j$, we contribute $0$, otherwise $\set{a,i}$ and $\set{b,j}$ are both two-element subsets of $\set{1,2,3}$, hence we may denote
+\[
+    \set{s} := \set{1,2,3}\setminus\set{a,i},\qquad \set{t}:=\set{1,2,3}\setminus\set{b,j}
+\]
+and let this pairing contribute the term
+\[
+    -\sgn((a,i,s))\sgn((b.j.t))y_sy_t,
+\]
+where $\sgn$ denotes the sign of a permutation. The pairing $\set{a,j},\set{b,i}$ contributes analogously.
+
+As an example, the action of $y_1y_2$ on $y_1y_3$ results in
+\[
+    \zav{\text{contribution of $\set{1,1},\set{2,3}$}} + \zav{\text{contribution of $\set{1,3},\set{2,1}$}} = 0 + \zav{-\sgn(1,3,2)\sgn(2,1,3)y_2y_3} = -y_2y_3,
+\]
+justifying the entry $-x_1$ in the third row (corresponds to $x_2\approx y_1y_3$) and fifth column (corresponds to $x_4\approx y_2y_3$). Similarly, the action of $y_1y_2$ on $y_3^2$ results in
+\[
+    2\cdot\zav{\text{contribution of $\set{1,3},\set{2,3}$}} = 2\cdot (-\sgn((1,3,2))\sgn((2,3,1))y_2y_1) = 2y_1y_2,
+\]
+justifying the entry $2x_1$ in the sixth row (corresponds to $x_5\approx y_3^2$) and second column (corresponds to $x_1\approx y_1y_2$).
+
+As a space of matrices, $E_6$ has a rank $5$ locus given by $(x_2^2x_3 - x_1x_2x_4 + x_0x_4^2 + x_1^2x_5 - 4x_0x_3x_5)$ and a rank $3$ locus given by
+\[
+    (x_4^2 - 4x_3x_5,\ x_2x_4 - 2x_1x_5,\ 2x_2x_3 - x_1x_4,\ x_2^2 - 4x_0x_5,\ x_1x_2 - 2x_0x_4,\ x_1^2 - 4x_0x_3).
+\]
+Of these, only the rank $4$ locus achieves $\GR(E_6) = 1+4 = 5$.
+
+By a computer calculation of the liftability criterion, we have verified that $E_6$ is $4$-unliftable (in all flattenings).
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -469,7 +580,7 @@ By a computer calculation of the liftability criterion, we manage to recognize t
 
 \subsection{Statement}
 
-A simple way for the rank $1$ locus to achieve geometric rank is for the whole $\pe T(A^*)$ to in fact be contained inside the Segre variety. Another, slightly less simple example if when $B=C$ is two-dimensional and $\pe T(A^*)=\pe^2$ is the space of symmetric $2\times2$ matrices. There, the rank $1$ locus becomes the curve of rank $1$ symmetric matrices. There, both the rank $1$ locus (curve) and the rank $2$ locus (everything) achieve
+A simple way for the rank $1$ locus to achieve geometric rank is for the whole $\pe T(A^*)$ to in fact be contained inside the Segre variety. Another, slightly less simple example is when $B=C$ is two-dimensional and $\pe T(A^*)=\pe^2$ is the space of symmetric $2\times2$ matrices. There, the rank $1$ locus becomes the curve of rank $1$ symmetric matrices. There, both the rank $1$ locus (curve) and the rank $2$ locus (everything) achieve
 \[
     \GR(T) = 1+1 = 0+2 = 2.
 \]
@@ -489,11 +600,6 @@ As a consequence of the result about the rank $2$ locus in part (b), the Theorem
 
 \subsection{Proof}
 
-A trivial example of when the rank $1$ locus might achieve $\GR(T)$ is when in fact the whole $\pe T(A^*)$ is a subspace of the Segre variety. Another, slightly less trivial way might be to take $B=C$ two-dimensional and $T(A^*)$ the space of symmetric $2\times2$ matrices. After projectivizing, this is a $\pe^2$, trivially of bounded rank $2$, intersects Segre in a curve. Then both the rank $1$ locus (curve) and the rank $2$ locus (everything) achieve
-\[
-    \GR(T) = 1+1 = 0+2 = 2.
-\]
-Our following proposition shows that in a sense, these are the only two ways for the rank $1$ locus to achieve geometric rank:
 
 \begin{theorem}[Hopf]
     \label{thrm:hopf}
@@ -517,7 +623,7 @@ Our following proposition shows that in a sense, these are the only two ways for
     \[\begin{tikzcd}[column sep = 5em]
         (B')^*\otimes (C')^* \arrow[rr, bend right, "\phi"]\arrow[r, phantom, yshift=.75em, "{\scriptstyle\text{multiplication}}"]\arrow[r, phantom, "\simeq"] & (B'\otimes C')^*\arrow[r, phantom, yshift=.75em, "{\scriptstyle\text{restriction}}"]\arrow[r] & E^*\arrow[r, phantom, yshift=.75em, "{\scriptstyle\text{restriction}}"]\arrow[r, hook, swap, "\rho"] & \Hom(\hat X,\ce).
     \end{tikzcd}\]
-    Now we wish to apply Hopf's theorem on $\phi$. For this, we need to verify it is injective on subspaces of the form $s\otimes (C')^*$ or $(B')^*\otimes s$ for non-zero $s\in (B')^*$ resp. $s\in (C')^*$. This is equivalent to verifying that for non-zero $\beta\in(B')^*$ and $\gamma\in (C')^*$, the element $\phi(\beta\otimes\gamma)$ is non-zero in $E^*$. For this, it suffices to verify that $\rho(\phi(\beta\otimes\gamma))\neq0$. Taking a arbitrary point $b\otimes c\in \hat X\subset \widehat\Seg(\pe B\otimes \pe C)$, we have
+    Now we wish to apply Hopf's theorem on $\phi$. For this, we need to verify it is injective on subspaces of the form $s\otimes (C')^*$ or $(B')^*\otimes s$ for non-zero $s\in (B')^*$ resp. $s\in (C')^*$. This is equivalent to verifying that for non-zero elements $\beta\in(B')^*$ and $\gamma\in (C')^*$, the element $\phi(\beta\otimes\gamma)$ is non-zero in $E^*$. For this, it suffices to verify that $\rho(\phi(\beta\otimes\gamma))\neq0$. Taking an arbitrary point $b\otimes c\in \hat X\subset \widehat\Seg(\pe B\otimes \pe C)$, we have
     \[
         \rho(\phi(\beta\otimes\gamma))(b\otimes c) = \beta(b)\cdot\gamma(c).
     \]
@@ -564,11 +670,11 @@ Now we may prove the main result:
         \tag{$\ast$}
         \dim\pe E \geq \dim\pe B' + \dim\pe C'.
     \end{equation}
-    Let us extract a different inequality from the rank $1$ locus achieving $\GR(T)$ which significantly constrain the situation in conjuction with the above. We have
+    Let us extract a different inequality from the rank $1$ locus achieving $\GR(T)$ which will significantly constrain the situation in conjuction with the above. We have
     \[
         \GR(T) = \codim_{\pe A^*} Y^1_T + 1 = \dim\pe A^*,
     \]
-    since we assumed the rank $1$ locus in one-dimensional. On the other hand, $\pe E$ is contained both in $\pe T(A^*)$ and $\pe(B'\otimes C')$. Without loss of generality, we may assume $\dim B'\leq \dim C'$, hence matrices $B'\otimes C'$ are of bounded rank $\dim B'$. Thus $\pe E$ is contained within (the image under $T$ of) the rank $\dim B'$ locus, hence
+    since we assumed the rank $1$ locus in one-dimensional. On the other hand, $\pe E$ is contained both in $\pe T(A^*)$ and $\pe(B'\otimes C')$. Without loss of generality, we may assume $\dim B'\leq \dim C'$, hence $B'\otimes C'$ is a space of matrices of bounded rank $\dim B'$. Thus $\pe E$ is contained within (the image under $T$ of) the rank $\dim B'$ locus, hence
     \[
         \codim_{\pe A^*}Y^{\dim B'}_T+\dim B' = \dim\pe A^* - \dim Y^{\dim B'}_T +\dim B' \leq \dim \pe A^* -\dim\pe E +\dim B'.
     \]
@@ -585,11 +691,11 @@ Now we may prove the main result:
     \]
     i.e. $1\geq\dim\pe C'\geq\dim\pe B'$. Further, we must have $\dim\pe(B'\otimes C')\geq\dim X = 1$, which implies at least on of $\pe B'$, $\pe C'$ is one-dimensional. Thus $\dim\pe C' = 1$ and $\dim\pe B'\in\set{0,1}$.
 
-    If $\dim\pe B' = 0$, then $X\subset\pe (B'\otimes C')$. Since both sides of the inclusion are one-dimensional, we see $X=\pe(B'\otimes C')$, hence $\pe T(A^*)$ indeed contains a linear subspace of the Segre variety, as posited by (a).
+    If $\dim\pe B' = 0$, then both sides of the inclusion $X\subset\pe (B'\otimes C')$ are one-dimensional irreducible subvarieties of $\pe(B\otimes C)$, so we see $X=\pe(B'\otimes C')$. Hence $\pe T(A^*)$ indeed contains a linear subspace of the Segre variety, as posited by (a).
 
     If $\dim\pe B' = 1$, let us assume $\pe E$ does not contain a subspace of the Segre variety and prove that it is, up to the $\GL(B)\times\GL(C)$ action, the space of $2\times2$ matrices, as posited by (b). First, let us observe that the restrictions of $\pr_B$, $\pr_C$ to $X$ are injective: if $\pr_C$ restricted to $X$ is not injective, we find two distinct $[b_1\otimes c], [b_2\otimes c]\in X$, hence $\pe E$ contains $\spn(\set{[b_1\otimes c], [b_2\otimes c]}) = \spn(\set{[b_1], [b_2]})\otimes c$, which is a linear subspace of the Segre variety, a contradiction.
 
-    Now, since $\pr_B$, $\pr_C$ (restricted to $X$) are injective projective homomorphisms and $\dim X = \dim \pe B' = \dim\pe C' = 1$, they must in fact be surjective, and so $X$ constitutes a graph of an isomorphism $\pe^1 = \pe B' \simeq \pe C' = \pe^1$. Such an isomorphism is given by an invertible $2\times 2$ modulo scalars (see e.g. \cite[15.5.A]{rising-sea}). By considering appropriate bases of $B'$ and $C'$, we may assume the isomorphism is given by the identity. But then is the curve of rank $1$ symmetric matrices inside $\Seg(\pe^1\times\pe^1)$ and its span $\pe E$ becomes the subspace of all symmetric $2\times 2$ matrices, which is what we wished to prove.
+    Now, since $\pr_B$, $\pr_C$ (restricted to $X$) are injective projective homomorphisms and $\dim X = \dim \pe B' = \dim\pe C' = 1$, they must in fact be surjective, and so $X$ constitutes a graph of an isomorphism $\pe^1 = \pe B' \simeq \pe C' = \pe^1$. Such an isomorphism is given by an invertible $2\times 2$ matrix modulo scalars (see e.g. \cite[15.5.A]{rising-sea}). By considering appropriate bases of $B'$ and $C'$, we may assume the isomorphism is given by the identity. But then $X$ is the curve of rank $1$ symmetric matrices inside $\Seg(\pe^1\times\pe^1)$ and its span $\pe E$ becomes the subspace of all symmetric $2\times 2$ matrices, which is what we wished to prove.
 
     Moreover, since we reached an equality in ($\dag$) and we had $\dim B'=2$, we must have encountered an equality in
     \[
